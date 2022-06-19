@@ -21,5 +21,14 @@ function main(): void {
 	});
 }
 
-// main();
-new Automato("123456789012345678", 0);
+function a(){console.log("function a");}
+function b(){console.log("function b");}
+function c(){console.log("function c");}
+
+const arr = [
+	[a],
+	[b],
+	[c]
+]
+
+arr[2][0]()
