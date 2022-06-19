@@ -1,3 +1,4 @@
+import { Automato } from './Automato';
 import { Digitos, Letras, Simbolos } from './Simbolos';
 import { Token } from "./Token";
 
@@ -5,7 +6,9 @@ import { Token } from "./Token";
 export class AnalisadorLexico {
     // static analisadorLexico():Token {}
 	
-    static analisadorLexico() {}
+    static scanner(palavra: string) {
+        // new Automato(palavra, 0);
+    }
 
 	static checarPalavra(palavra: String) {
 		let s: string = "awdadaw8daw4aw2awda6awdw8vd2grte5s3s";

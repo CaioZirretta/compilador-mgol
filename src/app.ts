@@ -1,21 +1,25 @@
+import { Automato } from "./lexico/Automato";
 import * as fs from "fs";
 import * as os from "os";
+import { AnalisadorLexico } from "./lexico/AnalisadorLexico";
 
-class Main {
-	arquivo: string;
-	arquivoEmLinhas: string[];
-	palavras: string[][] = [];
+let arquivo: string;
+let arquivoEmLinhas: string[];
+let palavras: string[][] = [];
 
-	constructor(path: string) {
-		this.arquivo = fs.readFileSync(__dirname + path, "utf-8");
-		this.arquivoEmLinhas = this.arquivo.split(os.EOL);
+function main(): void {
+	arquivo = fs.readFileSync(__dirname + "/assets/FONTE.txt", "utf-8");
+	arquivoEmLinhas = arquivo.split(os.EOL);
+	arquivoEmLinhas.forEach((e) => {
+		palavras.push(e.split(" "));
+	});
 
-		this.arquivoEmLinhas.forEach((e) => {
-			this.palavras.push(e.split(" "));
+	palavras.forEach((fraseArray) => {
+		fraseArray.forEach((palavra) => {
+			AnalisadorLexico.scanner(palavra);
 		});
-	}
+	});
 }
 
-const main = new Main("/assets/FONTE.txt");
-console.log(main.palavras);
-
+// main();
+new Automato("123456789012345678", 0);
