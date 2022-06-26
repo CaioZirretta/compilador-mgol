@@ -1,7 +1,7 @@
 export type Token = {
-	Classe: String;
-	Lexema: String;
-	Tipo: TokenType;
+	classe: string;
+	lexema: string;
+	tipo: TokenType | string;
 };
 
 export enum TokenType {
@@ -12,5 +12,4 @@ export enum TokenType {
 }
 
 export const TokenList: Token[] = [
-    { Classe: "tipo1", Lexema: "palavra", Tipo: TokenType.Inteiro }
 ];

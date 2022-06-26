@@ -1,21 +1,10 @@
-import { Automato } from './Automato';
-import { Digitos, Letras, Simbolos } from './Simbolos';
-import { Token } from "./Token";
-
+import { ErroLexico } from './model/ErrosLexicos';
+import { Automato } from "./model/Automato";
+import { Digitos, Letras, Simbolos } from "./model/Simbolos";
+import { Token } from "./model/Token";
 
 export class AnalisadorLexico {
-    // static analisadorLexico():Token {}
-	
-    static scanner(palavra: string) {
-        // new Automato(palavra, 0);
-    }
-
-	static checarPalavra(palavra: String) {
-		let s: string = "awdadaw8daw4aw2awda6awdw8vd2grte5s3s";
-		for (let i = 0; i < s.length; i++) {
-			if (Simbolos.includes(s[i])) {
-				console.log(s[i]);
-			}
-		}
+	static scanner(palavra: string): Token | ErroLexico {
+		return Automato.q0(palavra);
 	}
 }
