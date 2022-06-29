@@ -37,5 +37,3 @@ import { Reservadas } from './lexico/model/Simbolos';
 
 // nf();
 
-const x = Reservadas.some(r => { r === "varinicio"})
-console.log(x);

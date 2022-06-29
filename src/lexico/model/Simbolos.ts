@@ -1,16 +1,105 @@
-import { TabelaDeSimbolos } from './TabelaDeSimbolos';
+import { TabelaDeSimbolos } from "./TabelaDeSimbolos";
 
-export const Digitos: string[] = [
-    "1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
-];
+export const Digitos: string[] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
 
 export const Letras: string[] = [
-    "A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z",
-    "a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z",
+	"A",
+	"B",
+	"C",
+	"D",
+	"E",
+	"F",
+	"G",
+	"H",
+	"I",
+	"J",
+	"K",
+	"L",
+	"M",
+	"N",
+	"O",
+	"P",
+	"Q",
+	"R",
+	"S",
+	"T",
+	"U",
+	"V",
+	"W",
+	"X",
+	"Y",
+	"Z",
+	"a",
+	"b",
+	"c",
+	"d",
+	"e",
+	"f",
+	"g",
+	"h",
+	"i",
+	"j",
+	"k",
+	"l",
+	"m",
+	"n",
+	"o",
+	"p",
+	"q",
+	"r",
+	"s",
+	"t",
+	"u",
+	"v",
+	"w",
+	"x",
+	"y",
+	"z",
 ];
 
 export const Simbolos: string[] = [
-	"\,","\;","\:","\!", "\?", "\\", "\*", "\+", "\-", "\/", "\(", "\)", "\{", "\}", "\[", "\]", "\<", "\>", "\=", "\'", '\"', "\_"
+	"\,",
+	"\;",
+	"\:",
+	"\!",
+	"\?",
+	"\\",
+	"\*",
+	"\+",
+	"\-",
+	"\/",
+	"\(",
+	"\)",
+	"\{",
+	"\}",
+	"\[",
+	"\]",
+	"\<",
+	"\>",
+	"\=",
+	"\'",
+	'\"',
+	"\_",
 ];
 
-export const Reservadas: string[] = TabelaDeSimbolos.map(t => t.lexema)
+export const SimbolosDeEstado: string[] = [
+]
+
+export const Reservadas: string[] = TabelaDeSimbolos.map((t) => t.lexema);
+
+export const SimbolosString = [
+	["<", "operador relacional"],
+	[">", "operador relacional"],
+	["<>", "operador relacional"],
+	["<=", "operador relacional"],
+	[">=", "operador relacional"],
+	["\=", "operador relacional"],
+	["\+", "operador aritmético"],
+	["\-", "operador aritmético"],
+	["\*", "operador aritmético"],
+	["\/", "operador aritmético"],
+	["(", "abre parenteses"],
+	[")", "fecha parenteses"],
+	[";", "ponto e virgula"],
+	[",", "virgula"],
+];
