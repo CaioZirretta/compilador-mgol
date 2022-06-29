@@ -4,7 +4,7 @@ import { TabelaDeSimbolos } from "./lexico/model/TabelaDeSimbolos";
 
 // -------------- 1.1 - Classificação de linhas -------------
 
-console.log(Automato.iniciar("escreva;")[0])
+console.log(Automato.iniciar("escreva leia ;")[0])
 
 
 // -------------- 1.0 - Classificação de palavras -------------

@@ -25,6 +25,8 @@ export class Automato {
 		Automato.indexInicial = indexOpcional ? indexOpcional : 0;
 		index = Automato.indexInicial;
 
+		console.log("q0", Automato.indexInicial, index, linha[index]);
+
 		if (!linha[index]) {
 			return [Automato.tokens, Automato.erros];
 		}
@@ -226,7 +228,7 @@ export class Automato {
 
 	private static q13(linha: string, index: number) {
 		console.log("q13", Automato.indexInicial, index, linha[index]);
-		
+
 		if (!linha[index]) {
 			const token = Automato.inserirToken(Automato.linhaSubstring(linha, index + 1));
 			Automato.tokens.push(token);
@@ -234,7 +236,7 @@ export class Automato {
 		}
 
 		const opcoes: OpcoesType[] = [
-			[[" "], Automato.novoToken],
+			[[...Simbolos, " "], Automato.novoToken],
 			[[...Digitos, ...Letras], Automato.q13],
 		];
 
@@ -321,8 +323,17 @@ export class Automato {
 	}
 
 	private static q23(linha: string, index: number) {
-		console.log("q23");
-		const token = { classe: "ponto e virgula", lexema: linha, tipo: "ponto e virgula" };
+		console.log("q23", Automato.indexInicial, index, linha[index]);
+		const token = {
+			classe: "ponto e virgula",
+			lexema: linha.substring(Automato.indexInicial, index),
+			tipo: "ponto e virgula",
+		};
+		Automato.tokens.push(token);
+		if (!linha[index + 1]) {
+			return;
+		}
+		Automato.q0(linha, index);
 	}
 
 	private static q24(linha: string, index: number) {
@@ -371,7 +382,7 @@ export class Automato {
 		Simbolos.some((simbolo) => {
 			if (simbolo === linha.substring(Automato.indexInicial, Automato.indexInicial + index)) {
 				// Pegar o nome do símbolo
-				token = { classe: simbolo, lexema: simbolo, tipo: simbolo };
+				token = { classe: simbolo, lexema: Automato.linhaSubstring(linha, index + 1), tipo: simbolo };
 				Automato.tokens.push(token);
 				Automato.q0(linha, index);
 				return;
@@ -383,16 +394,15 @@ export class Automato {
 		let token: Token;
 		let linhaN = Automato.linhaSubstring(linha, index);
 
-		token = Automato.inserirToken(
-			linhaN
-		);
+		token = Automato.inserirToken(linhaN);
 		console.log(linhaN, token);
 
 		Automato.tokens.push(token);
-		Automato.q0(linha, index);
+		Automato.q0(linha, index - 1);
 		return;
 	}
 
+	// Usar só pra espaços
 	private static linhaSubstring(linha: string, index: number) {
 		return linha.substring(Automato.indexInicial, index - 1);
 	}
