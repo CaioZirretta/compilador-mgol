@@ -2,6 +2,7 @@ import { TabelaDeSimbolos } from "./TabelaDeSimbolos";
 import { ErroLexico, ErrosLexicos } from "./ErrosLexicos";
 import { Digitos, Letras, Reservadas, Simbolos } from "./Simbolos";
 import { Token, TokenList, TokenType } from "./Token";
+import { notDeepEqual } from "assert";
 
 // TODO mensagens de erro
 
@@ -12,12 +13,21 @@ export class Automato {
 	static tokens: Token[] = [];
 	static erros: ErroLexico[] = [];
 	static indexInicial: number = 0;
+	static numeroLinha: number = 0;
 
-	static iniciar(linha: string): ReturnType {
+	static iniciar(linha: string, numeroLinha:number): ReturnType {
 		Automato.tokens.length = 0;
 		Automato.erros.length = 0;
+		Automato.numeroLinha = numeroLinha;
 		return this.q0(linha);
 	}
+
+	// Validação
+	// !proximo para não precisar botar o q0 nas opções
+	// 	e também não precisar especificar o que não for possível no estado
+	// 	como um default no switch
+	// !linha[index] para chegar o fim da linha
+	// Tomar ações diferentes para cada caso e padronizar
 
 	private static q0(linha: string, indexOpcional?: number): ReturnType {
 		let index: number = 0;
@@ -32,8 +42,8 @@ export class Automato {
 		}
 
 		const opcoes: OpcoesType[] = [
-			[[" "], Automato.q0],
 			[['"'], Automato.q11],
+			[[" "], Automato.q0],
 			[["{"], Automato.q14],
 			[["<"], Automato.q16],
 			[[">"], Automato.q18],
@@ -49,10 +59,6 @@ export class Automato {
 
 		const proximo = Automato.proximoEstado(opcoes, linha[index]);
 
-		if (!proximo) {
-			const erro = { mensagem: "", linha: 0, coluna: 0 };
-		}
-
 		index++;
 
 		proximo!(linha, index);
@@ -61,183 +67,40 @@ export class Automato {
 	}
 
 	private static q1(linha: string, index: number) {
-		if (!linha[index]) {
-			const token: Token = { classe: "real", lexema: linha, tipo: TokenType.Real };
-			return [token, index];
-		}
-
+		console.log("q1", Automato.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, Automato.q1],
+			[[...Simbolos, " "], Automato.novoTokenInteiro],
 			[["."], Automato.q6],
 			[["E", "e"], Automato.q2],
+			[Letras, Automato.erroProximoCaractere],
 		];
 
 		const proximo = Automato.proximoEstado(opcoes, linha[index]);
 
-		if (!proximo) {
-			const erro = { mensagem: "", linha: 0, coluna: 0 };
-			ErrosLexicos.push(erro);
+		if (!linha[index]) {
+			const token: Token = {
+				classe: "número inteiro",
+				lexema: linha.substring(Automato.indexInicial, index),
+				tipo: TokenType.Inteiro,
+			};
+			Automato.tokens.push(token);
+			Automato.q0(linha, index);
+			return;
 		}
 
 		index++;
+		proximo!(linha, index);
 	}
 
 	private static q2(linha: string, index: number) {
+		console.log("q2", Automato.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, Automato.q4],
 			[["+"], Automato.q3],
 			[["-"], Automato.q5],
-		];
-		const proximo = Automato.proximoEstado(opcoes, linha[index]);
-		if (!proximo) {
-			const erro = { mensagem: "", linha: 0, coluna: 0 };
-			ErrosLexicos.push(erro);
-		}
-
-		index++;
-	}
-
-	private static q3(linha: string, index: number) {
-		const opcoes: OpcoesType[] = [[Digitos, Automato.q4]];
-
-		const proximo = Automato.proximoEstado(opcoes, linha[index]);
-		if (!proximo) {
-			const erro = { mensagem: "", linha: 0, coluna: 0 };
-			ErrosLexicos.push(erro);
-		}
-
-		index++;
-	}
-
-	private static q4(linha: string, index: number) {
-		if (!linha[index]) {
-			const token: Token = { classe: "inteiro", lexema: linha, tipo: TokenType.Inteiro };
-			return [token, index];
-		}
-
-		const opcoes: OpcoesType[] = [[Digitos, Automato.q4]];
-
-		const proximo = Automato.proximoEstado(opcoes, linha[index]);
-		if (!proximo) {
-			const erro = { mensagem: "", linha: 0, coluna: 0 };
-			ErrosLexicos.push(erro);
-		}
-
-		index++;
-	}
-
-	private static q5(linha: string, index: number) {
-		const opcoes: OpcoesType[] = [[Digitos, Automato.q9]];
-
-		const proximo = Automato.proximoEstado(opcoes, linha[index]);
-		if (!proximo) {
-			const erro = { mensagem: "", linha: 0, coluna: 0 };
-			ErrosLexicos.push(erro);
-		}
-
-		index++;
-	}
-
-	private static q6(linha: string, index: number) {
-		const opcoes: OpcoesType[] = [[Digitos, Automato.q7]];
-
-		const proximo = Automato.proximoEstado(opcoes, linha[index]);
-		if (!proximo) {
-			const erro = { mensagem: "", linha: 0, coluna: 0 };
-			ErrosLexicos.push(erro);
-		}
-
-		index++;
-	}
-
-	private static q7(linha: string, index: number) {
-		if (!linha[index]) {
-			const token = { classe: "real", lexema: linha, tipo: TokenType.Real };
-			return [token, index];
-		}
-
-		const opcoes: OpcoesType[] = [
-			[Digitos, Automato.q7],
-			[["E", "e"], Automato.q8],
-		];
-
-		const proximo = Automato.proximoEstado(opcoes, linha[index]);
-
-		if (!proximo) {
-			const erro = { mensagem: "", linha: 0, coluna: 0 };
-			ErrosLexicos.push(erro);
-		}
-
-		index++;
-	}
-
-	private static q8(linha: string, index: number) {
-		const opcoes: OpcoesType[] = [[[...Digitos, "+", "-"], Automato.q9]];
-
-		const proximo = Automato.proximoEstado(opcoes, linha[index]);
-		if (!proximo) {
-			const erro = { mensagem: "", linha: 0, coluna: 0 };
-			ErrosLexicos.push(erro);
-		}
-
-		index++;
-	}
-
-	private static q9(linha: string, index: number) {
-		if (!linha[index]) {
-			const token: Token = { classe: "real", lexema: linha, tipo: TokenType.Real };
-			return [token, index];
-		}
-
-		const opcoes: OpcoesType[] = [[Digitos, Automato.q9]];
-
-		const proximo = Automato.proximoEstado(opcoes, linha[index]);
-		if (!proximo) {
-			const erro = { mensagem: "", linha: 0, coluna: 0 };
-			ErrosLexicos.push(erro);
-		}
-
-		index++;
-	}
-
-	private static q10(linha: string, index: number) {
-		const token = { classe: "EOF", lexema: "EOF", tipo: "EOF" };
-		return [token, index];
-	}
-
-	private static q11(linha: string, index: number) {
-		const opcoes: OpcoesType[] = [
-			[['"'], Automato.q12],
-			[[...Digitos, ...Letras, ...Simbolos], Automato.q11],
-		];
-
-		const proximo = Automato.proximoEstado(opcoes, linha[index]);
-		if (!proximo) {
-			const erro = { mensagem: "", linha: 0, coluna: 0 };
-			ErrosLexicos.push(erro);
-		}
-
-		index++;
-	}
-
-	private static q12(linha: string, index: number) {
-		const token: Token = { classe: "literal", lexema: linha, tipo: "literal" };
-		TokenList.push(token);
-		return [token, index];
-	}
-
-	private static q13(linha: string, index: number) {
-		console.log("q13", Automato.indexInicial, index, linha[index]);
-
-		if (!linha[index]) {
-			const token = Automato.inserirToken(Automato.linhaSubstring(linha, index + 1));
-			Automato.tokens.push(token);
-			return;
-		}
-
-		const opcoes: OpcoesType[] = [
-			[[...Simbolos, " "], Automato.novoToken],
-			[[...Digitos, ...Letras], Automato.q13],
+			[[...Simbolos, ...Letras], Automato.erroProximoCaractere],
+			[[" "], Automato.erroProximoCaractereVazio],
 		];
 
 		const proximo = Automato.proximoEstado(opcoes, linha[index]);
@@ -246,98 +109,383 @@ export class Automato {
 		proximo!(linha, index);
 	}
 
+	private static q3(linha: string, index: number) {
+		console.log("q3", Automato.indexInicial, index, linha[index]);
+		const opcoes: OpcoesType[] = [
+			[Digitos, Automato.q4],
+			[[...Simbolos, ...Letras], Automato.erroProximoCaractere],
+			[[" "], Automato.erroProximoCaractereVazio],
+		];
+
+		const proximo = Automato.proximoEstado(opcoes, linha[index]);
+
+		index++;
+		proximo!(linha, index);
+	}
+
+	private static q4(linha: string, index: number) {
+		console.log("q4", Automato.indexInicial, index, linha[index]);
+		const opcoes: OpcoesType[] = [
+			[Digitos, Automato.q4],
+			[[...Simbolos, " "], Automato.novoTokenInteiro],
+			[Letras, Automato.erroProximoCaractere],
+		];
+
+		const proximo = Automato.proximoEstado(opcoes, linha[index]);
+
+		if (!linha[index]) {
+			const token: Token = {
+				classe: "número inteiro",
+				lexema: linha.substring(Automato.indexInicial, index),
+				tipo: TokenType.Inteiro,
+			};
+			Automato.tokens.push(token);
+			Automato.q0(linha, index);
+			return;
+		}
+
+		index++;
+		proximo!(linha, index);
+	}
+
+	private static q5(linha: string, index: number) {
+		console.log("q5", Automato.indexInicial, index, linha[index]);
+		const opcoes: OpcoesType[] = [
+			[Digitos, Automato.q9],
+			[[...Simbolos, ...Letras], Automato.erroProximoCaractere],
+			[[" "], Automato.erroProximoCaractereVazio],
+		];
+
+		const proximo = Automato.proximoEstado(opcoes, linha[index]);
+
+		index++;
+		proximo!(linha, index);
+	}
+
+	private static q6(linha: string, index: number) {
+		console.log("q6", Automato.indexInicial, index, linha[index]);
+		const opcoes: OpcoesType[] = [
+			[Digitos, Automato.q7],
+			[[...Simbolos, ...Letras], Automato.erroProximoCaractere],
+			[[" "], Automato.erroProximoCaractereVazio],
+		];
+
+		const proximo = Automato.proximoEstado(opcoes, linha[index]);
+
+		index++;
+		proximo!(linha, index);
+	}
+
+	private static q7(linha: string, index: number) {
+		console.log("q7", Automato.indexInicial, index, linha[index]);
+		const opcoes: OpcoesType[] = [
+			[Digitos, Automato.q7],
+			[["E", "e"], Automato.q8],
+			[[...Simbolos, " "], Automato.novoTokenInteiro],
+			[Letras, Automato.erroProximoCaractere],
+		];
+
+		const proximo = Automato.proximoEstado(opcoes, linha[index]);
+
+		if (!linha[index]) {
+			const token: Token = {
+				classe: "número real",
+				lexema: linha.substring(Automato.indexInicial, index),
+				tipo: TokenType.Real,
+			};
+			Automato.tokens.push(token);
+			Automato.q0(linha, index);
+			return;
+		}
+
+		index++;
+		proximo!(linha, index);
+	}
+
+	private static q8(linha: string, index: number) {
+		console.log("q8", Automato.indexInicial, index, linha[index]);
+		const opcoes: OpcoesType[] = [
+			[[...Digitos, "+", "-"], Automato.q9],
+			[[...Simbolos, ...Letras], Automato.erroProximoCaractere],
+			[[" "], Automato.erroProximoCaractereVazio],
+		];
+
+		const proximo = Automato.proximoEstado(opcoes, linha[index]);
+
+		index++;
+
+		if (!proximo) {
+			Automato.q0(linha, index);
+		}
+
+		proximo!(linha, index);
+	}
+
+	private static q9(linha: string, index: number) {
+		console.log("q9", Automato.indexInicial, index, linha[index]);
+		const opcoes: OpcoesType[] = [
+			[Digitos, Automato.q9],
+			[[...Simbolos, " "], Automato.novoTokenReal],
+			[Letras, Automato.erroProximoCaractere],
+		];
+
+		const proximo = Automato.proximoEstado(opcoes, linha[index]);
+
+		if (!linha[index]) {
+			const token: Token = {
+				classe: "número real",
+				lexema: linha.substring(Automato.indexInicial, index),
+				tipo: TokenType.Real,
+			};
+			Automato.tokens.push(token);
+			Automato.q0(linha, index);
+			return;
+		}
+
+		index++;
+		proximo!(linha, index);
+	}
+
+	private static q11(linha: string, index: number) {
+		console.log("q11", Automato.indexInicial, index, linha[index]);
+		const opcoes: OpcoesType[] = [
+			[['"'], Automato.q12],
+			[[...Digitos, ...Letras, ...Simbolos, " "], Automato.q11],
+		];
+
+		const proximo = Automato.proximoEstado(opcoes, linha[index]);
+
+		index++;
+
+		if (!proximo) {
+			Automato.q0(linha, index);
+		}
+
+		proximo!(linha, index);
+	}
+
+	private static q12(linha: string, index: number) {
+		console.log("q12", Automato.indexInicial, index, linha[index]);
+
+		const token: Token = {
+			classe: "literal",
+			lexema: linha.substring(Automato.indexInicial, index + 1),
+			tipo: "literal",
+		};
+
+		Automato.tokens.push(token);
+
+		if (!linha[index]) {
+			return;
+		}
+		Automato.q0(linha, index);
+	}
+
+	private static q13(linha: string, index: number) {
+		console.log("q13", Automato.indexInicial, index, linha[index]);
+
+		const opcoes: OpcoesType[] = [
+			[[...Simbolos, " "], Automato.novoTokenid],
+			[[...Digitos, ...Letras], Automato.q13],
+		];
+
+		const proximo = Automato.proximoEstado(opcoes, linha[index]);
+
+		if (!linha[index] || !proximo) {
+			const token: Token = Automato.inserirToken(linha.substring(Automato.indexInicial, index));
+			if (token.classe === "fim") {
+				token.classe = "EOF";
+				token.tipo = "EOF";
+			}
+			Automato.tokens.push(token);
+			return;
+		}
+
+		index++;
+		proximo!(linha, index);
+	}
+
 	private static q14(linha: string, index: number) {
+		console.log("q14", Automato.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[["}"], Automato.q15],
 			[[...Digitos, ...Letras, ...Simbolos], Automato.q14],
 		];
-
-		const proximo = Automato.proximoEstado(opcoes, linha[index]);
-		if (!proximo) {
-			const erro = { mensagem: "", linha: 0, coluna: 0 };
-			ErrosLexicos.push(erro);
+		if (!linha[index]) {
+			return;
 		}
-
 		index++;
+		const proximo = Automato.proximoEstado(opcoes, linha[index]);
+		proximo!(linha, index);
 	}
 
 	private static q15(linha: string, index: number) {
-		const token = { classe: "comentario", lexema: linha, tipo: "comentario" };
-		return [token, index];
+		console.log("q15", Automato.indexInicial, index, linha[index]);
+		const token: Token = {
+			classe: "comentario",
+			lexema: linha.substring(Automato.indexInicial, index + 1),
+			tipo: "comentario",
+		};
+		Automato.tokens.push(token);
+		if (!linha[index]) {
+			return;
+		}
+		index++;
+		Automato.q0(linha, index);
 	}
 
 	private static q16(linha: string, index: number) {
-		if (!linha[index]) {
-			return Automato.q19(linha, index);
-		}
+		console.log("q16", Automato.indexInicial, index, linha[index]);
 
 		const opcoes: OpcoesType[] = [
 			[["-"], Automato.q17],
 			[[">", "="], Automato.q19],
+			[[" ", ...Letras, ...Digitos, ...Simbolos], Automato.q0],
 		];
 
 		const proximo = Automato.proximoEstado(opcoes, linha[index]);
-		if (!proximo) {
-			const erro = { mensagem: "", linha: 0, coluna: 0 };
-			ErrosLexicos.push(erro);
+
+		if (proximo == Automato.q0 || !linha[index]) {
+			const token: Token = {
+				classe: "operador relacional",
+				lexema: linha.substring(Automato.indexInicial, index),
+				tipo: "operador relacional",
+			};
+			Automato.tokens.push(token);
+			Automato.q0(linha, index);
+			return;
 		}
 
 		index++;
+		proximo!(linha, index);
 	}
 
+	// Padronizar como q1 daqui pra baixo
 	private static q17(linha: string, index: number) {
-		const token = { classe: "atribuicao", lexema: linha, tipo: "atribuicao" };
-		return [token, index];
+		console.log("q17", Automato.indexInicial, index, linha[index]);
+
+
+
+		const token: Token = {
+			classe: "atribuição",
+			lexema: linha.substring(Automato.indexInicial, index),
+			tipo: "atribuição",
+		};
+		Automato.tokens.push(token);
+		if (!linha[index]) {
+			return;
+		}
+		index++;
+		Automato.q0(linha, index);
 	}
 
 	private static q18(linha: string, index: number) {
-		if (!linha[index]) {
-			return Automato.q19(linha, index);
-		}
-
-		const opcoes: OpcoesType[] = [[["="], Automato.q19]];
+		const opcoes: OpcoesType[] = [
+			[["="], Automato.q19],
+			[[" ", ...Letras, ...Digitos, ...Simbolos], Automato.q0],
+		];
 
 		const proximo = Automato.proximoEstado(opcoes, linha[index]);
-		if (!proximo) {
-			const erro = { mensagem: "", linha: 0, coluna: 0 };
-			ErrosLexicos.push(erro);
+
+		if (proximo == Automato.q0 || !linha[index]) {
+			const token: Token = {
+				classe: "operador relacional",
+				lexema: linha.substring(Automato.indexInicial, index),
+				tipo: "operador relacional",
+			};
+			Automato.tokens.push(token);
+			Automato.q0(linha, index);
+			return;
 		}
 
 		index++;
+		proximo!(linha, index);
 	}
 
 	private static q19(linha: string, index: number) {
-		const token = { classe: "operador relacional", lexema: linha, tipo: "operador relacional" };
+		console.log("q19", Automato.indexInicial, index, linha[index]);
+
+		const token: Token = {
+			classe: "operador relacional",
+			lexema: linha.substring(Automato.indexInicial, index),
+			tipo: "operador relacional",
+		};
+		Automato.tokens.push(token);
+		if (!linha[index]) {
+			return;
+		}
+		// index++;
+		Automato.q0(linha, index);
 	}
 
 	private static q20(linha: string, index: number) {
-		const token = { classe: "operador aritmetico", lexema: linha, tipo: "operador aritmetico" };
+		console.log("q20", Automato.indexInicial, index, linha[index]);
+		const token: Token = {
+			classe: "operador aritmético",
+			lexema: linha.substring(Automato.indexInicial, index),
+			tipo: "operador aritmético",
+		};
+		Automato.tokens.push(token);
+		if (!linha[index]) {
+			return;
+		}
+		Automato.q0(linha, index);
 	}
 
 	private static q21(linha: string, index: number) {
-		const token = { classe: "abre parenteses", lexema: linha, tipo: "abre parenteses" };
+		console.log("q21", Automato.indexInicial, index, linha[index]);
+		const token: Token = {
+			classe: "abre parenteses",
+			lexema: linha.substring(Automato.indexInicial, index),
+			tipo: "abre parenteses",
+		};
+		Automato.tokens.push(token);
+		if (!linha[index]) {
+			return;
+		}
+		Automato.q0(linha, index);
 	}
 
 	private static q22(linha: string, index: number) {
-		const token = { classe: "fecha parenteses", lexema: linha, tipo: "fecha parenteses" };
+		console.log("q22", Automato.indexInicial, index, linha[index]);
+		const token: Token = {
+			classe: "fecha parenteses",
+			lexema: linha.substring(Automato.indexInicial, index),
+			tipo: "fecha parenteses",
+		};
+		Automato.tokens.push(token);
+		if (!linha[index]) {
+			return;
+		}
+		Automato.q0(linha, index);
 	}
 
 	private static q23(linha: string, index: number) {
 		console.log("q23", Automato.indexInicial, index, linha[index]);
-		const token = {
+		const token: Token = {
 			classe: "ponto e virgula",
 			lexema: linha.substring(Automato.indexInicial, index),
 			tipo: "ponto e virgula",
 		};
 		Automato.tokens.push(token);
-		if (!linha[index + 1]) {
+		if (!linha[index]) {
 			return;
 		}
 		Automato.q0(linha, index);
 	}
 
 	private static q24(linha: string, index: number) {
-		const token = { classe: "virgula", lexema: linha, tipo: "virgula" };
+		console.log("q24", Automato.indexInicial, index, linha[index]);
+		const token: Token = {
+			classe: "vírgula",
+			lexema: linha.substring(Automato.indexInicial, index),
+			tipo: "vírgula",
+		};
+		Automato.tokens.push(token);
+		if (!linha[index]) {
+			return;
+		}
+		Automato.q0(linha, index);
 	}
 
 	private static proximoEstado(opcoes: OpcoesType[], caractere: string) {
@@ -377,33 +525,83 @@ export class Automato {
 		return token;
 	}
 
-	private static novoTokenSimbolo(linha: string, index: number) {
-		let token: Token;
-		Simbolos.some((simbolo) => {
-			if (simbolo === linha.substring(Automato.indexInicial, Automato.indexInicial + index)) {
-				// Pegar o nome do símbolo
-				token = { classe: simbolo, lexema: Automato.linhaSubstring(linha, index + 1), tipo: simbolo };
-				Automato.tokens.push(token);
-				Automato.q0(linha, index);
-				return;
-			}
-		});
+	private static novoTokenReal(linha: string, index: number) {
+		const token: Token = {
+			classe: "número real",
+			lexema: linha.substring(Automato.indexInicial, index - 1),
+			tipo: TokenType.Real,
+		};
+		Automato.tokens.push(token);
+		Automato.q0(linha, index - 1);
+		return;
 	}
 
-	private static novoToken(linha: string, index: number) {
+	private static novoTokenInteiro(linha: string, index: number) {
+		const token: Token = {
+			classe: "número inteiro",
+			lexema: linha.substring(Automato.indexInicial, index - 1),
+			tipo: TokenType.Inteiro,
+		};
+		Automato.tokens.push(token);
+		Automato.q0(linha, index - 1);
+		return;
+	}
+
+	private static novoTokenid(linha: string, index: number) {
 		let token: Token;
-		let linhaN = Automato.linhaSubstring(linha, index);
+		let linhaN = linha.substring(Automato.indexInicial, index - 1);
 
 		token = Automato.inserirToken(linhaN);
-		console.log(linhaN, token);
 
 		Automato.tokens.push(token);
 		Automato.q0(linha, index - 1);
 		return;
 	}
 
-	// Usar só pra espaços
-	private static linhaSubstring(linha: string, index: number) {
-		return linha.substring(Automato.indexInicial, index - 1);
+	// private static erroProximoCaractereSimbolo(linha: string, index: number) {
+	// 	const erro: ErroLexico = {
+	// 		mensagem: "Erro léxico, número inválido",
+	// 		linha: 0,
+	// 		coluna: index ,
+	// 	};
+	// 	Automato.erros.push(erro);
+	// 	Automato.q0(linha, index - 1);
+	// 	return;
+	// }
+
+	private static erroProximoCaractere(linha: string, index: number) {
+		const erro: ErroLexico = {
+			mensagem: "Erro léxico, número inválido",
+			linha: Automato.numeroLinha,
+			coluna: index ,
+		};
+		Automato.erros.push(erro);
+
+		--index;
+		while (linha[index] && linha[index] !== " ") {
+			if (Simbolos.includes(linha[index])) {
+				Automato.q0(linha, index);
+				return;
+			}
+			index++;
+		}
+		Automato.q0(linha, index);
+		return;
+	}
+
+	private static erroProximoCaractereVazio(linha: string, index: number) {
+		const erro: ErroLexico = {
+			mensagem: "Erro léxico, número inválido",
+			linha: Automato.numeroLinha,
+			coluna: index ,
+		};
+		Automato.erros.push(erro);
+
+		--index;
+		while (linha[index] !== " ") {
+			index++;
+		}
+		Automato.q0(linha, index);
+		return;
 	}
 }
