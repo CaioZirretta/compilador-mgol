@@ -1,4 +1,4 @@
-import { Reservadas } from './lexico/model/Simbolos';
+import { Reservadas } from '../lexico/dicionario/Simbolos';
 function q0() {
 	return console.log("this is q0");
 }

@@ -1,7 +1,7 @@
-import { Automato, ReturnType } from "./model/Automato";
+import { AutomatoLexico, ReturnType } from "./model/AutomatoLexico";
 
 export class AnalisadorLexico {
-	static scanner(palavra: string): ReturnType {
-		return Automato.iniciar(palavra);
+	static scanner(linha: string, index: number): ReturnType {
+		return AutomatoLexico.iniciar(linha, index);
 	}
 }

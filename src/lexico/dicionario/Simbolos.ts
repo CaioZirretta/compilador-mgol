@@ -1,4 +1,4 @@
-import { TabelaDeSimbolos } from "./TabelaDeSimbolos";
+import { TabelaDeSimbolos } from "../model/TabelaDeSimbolos";
 
 export const Digitos: string[] = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"];
 
@@ -86,20 +86,3 @@ export const SimbolosDeEstado: string[] = [
 ]
 
 export const Reservadas: string[] = TabelaDeSimbolos.map((t) => t.lexema);
-
-export const SimbolosString = [
-	["<", "operador relacional"],
-	[">", "operador relacional"],
-	["<>", "operador relacional"],
-	["<=", "operador relacional"],
-	[">=", "operador relacional"],
-	["\=", "operador relacional"],
-	["\+", "operador aritmético"],
-	["\-", "operador aritmético"],
-	["\*", "operador aritmético"],
-	["\/", "operador aritmético"],
-	["(", "abre parenteses"],
-	[")", "fecha parenteses"],
-	[";", "ponto e virgula"],
-	[",", "virgula"],
-];

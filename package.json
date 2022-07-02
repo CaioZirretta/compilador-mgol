@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
 	"scratch": "ts-node-dev ./src/scratch.ts",
-	"test": "ts-node-dev ./src/test.spec.ts",
+	"test-lexico": "ts-node-dev ./src/test/lexicoTest.spec.ts",
     "dev": "ts-node-dev ./src/app",
     "compile": "npx tsc"
   },

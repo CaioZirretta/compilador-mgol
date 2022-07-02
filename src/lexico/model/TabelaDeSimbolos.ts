@@ -1,18 +1,18 @@
-import { Token } from "./Token";
+import { Token, TokenClasse } from "./Token";
 
 export const TabelaDeSimbolos: Token[] = [
-	{ classe: "inicio", lexema: "inicio", tipo: "inicio" },
-	{ classe: "varinicio", lexema: "varinicio", tipo: "varinicio" },
-	{ classe: "varfim", lexema: "varfim", tipo: "varfim" },
-	{ classe: "escreva", lexema: "escreva", tipo: "escreva" },
-	{ classe: "leia", lexema: "leia", tipo: "leia" },
-	{ classe: "se", lexema: "se", tipo: "se" },
-	{ classe: "entao", lexema: "entao", tipo: "entao" },
-	{ classe: "fimse", lexema: "fimse", tipo: "fimse" },
-	{ classe: "repita", lexema: "repita", tipo: "repita" },
-	{ classe: "fimRepita", lexema: "fimRepita", tipo: "fimRepita" },
-	{ classe: "fim", lexema: "fim", tipo: "fim" },
-	{ classe: "inteiro", lexema: "inteiro", tipo: "inteiro" },
-	{ classe: "literal", lexema: "literal", tipo: "literal" },
-	{ classe: "real", lexema: "real", tipo: "real" },
+	{ classe: TokenClasse.inicio, lexema: "inicio", tipo: "inicio" },
+	{ classe: TokenClasse.varinicio, lexema: "varinicio", tipo: "varinicio" },
+	{ classe: TokenClasse.varfim, lexema: "varfim", tipo: "varfim" },
+	{ classe: TokenClasse.escreva, lexema: "escreva", tipo: "escreva" },
+	{ classe: TokenClasse.leia, lexema: "leia", tipo: "leia" },
+	{ classe: TokenClasse.se, lexema: "se", tipo: "se" },
+	{ classe: TokenClasse.entao, lexema: "entao", tipo: "entao" },
+	{ classe: TokenClasse.fimse, lexema: "fimse", tipo: "fimse" },
+	{ classe: TokenClasse.repita, lexema: "repita", tipo: "repita" },
+	{ classe: TokenClasse.fimRepita, lexema: "fimRepita", tipo: "fimRepita" },
+	{ classe: TokenClasse.fim, lexema: "fim", tipo: "fim" },
+	{ classe: TokenClasse.inteiro, lexema: "inteiro", tipo: "inteiro" },
+	{ classe: TokenClasse.literal, lexema: "literal", tipo: "literal" },
+	{ classe: TokenClasse.real, lexema: "real", tipo: "real" },
 ];

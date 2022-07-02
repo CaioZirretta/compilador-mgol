@@ -1,8 +1,8 @@
-import { Automato } from "./lexico/model/Automato";
+import { AutomatoLexico } from "../lexico/model/AutomatoLexico";
 
 // -------------- 1.1 - Classificação de linhas -------------
 
-console.log(Automato.iniciar("> A", 1))
+console.log(AutomatoLexico.iniciar("123", 1))
 
 
 // -------------- 1.0 - Classificação de palavras -------------
