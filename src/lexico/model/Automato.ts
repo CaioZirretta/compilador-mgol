@@ -35,7 +35,7 @@ export class Automato {
 		Automato.indexInicial = indexOpcional ? indexOpcional : 0;
 		index = Automato.indexInicial;
 
-		console.log("q0", Automato.indexInicial, index, linha[index]);
+		// console.log("q0", Automato.indexInicial, index, linha[index]);
 
 		if (!linha[index]) {
 			return [Automato.tokens, Automato.erros];
@@ -67,7 +67,7 @@ export class Automato {
 	}
 
 	private static q1(linha: string, index: number) {
-		console.log("q1", Automato.indexInicial, index, linha[index]);
+		// console.log("q1", Automato.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, Automato.q1],
 			[[...Simbolos, " "], Automato.novoTokenInteiro],
@@ -94,7 +94,7 @@ export class Automato {
 	}
 
 	private static q2(linha: string, index: number) {
-		console.log("q2", Automato.indexInicial, index, linha[index]);
+		// console.log("q2", Automato.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, Automato.q4],
 			[["+"], Automato.q3],
@@ -110,7 +110,7 @@ export class Automato {
 	}
 
 	private static q3(linha: string, index: number) {
-		console.log("q3", Automato.indexInicial, index, linha[index]);
+		// console.log("q3", Automato.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, Automato.q4],
 			[[...Simbolos, ...Letras], Automato.erroProximoCaractere],
@@ -124,7 +124,7 @@ export class Automato {
 	}
 
 	private static q4(linha: string, index: number) {
-		console.log("q4", Automato.indexInicial, index, linha[index]);
+		// console.log("q4", Automato.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, Automato.q4],
 			[[...Simbolos, " "], Automato.novoTokenInteiro],
@@ -149,7 +149,7 @@ export class Automato {
 	}
 
 	private static q5(linha: string, index: number) {
-		console.log("q5", Automato.indexInicial, index, linha[index]);
+		// console.log("q5", Automato.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, Automato.q9],
 			[[...Simbolos, ...Letras], Automato.erroProximoCaractere],
@@ -163,7 +163,7 @@ export class Automato {
 	}
 
 	private static q6(linha: string, index: number) {
-		console.log("q6", Automato.indexInicial, index, linha[index]);
+		// console.log("q6", Automato.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, Automato.q7],
 			[[...Simbolos, ...Letras], Automato.erroProximoCaractere],
@@ -177,7 +177,7 @@ export class Automato {
 	}
 
 	private static q7(linha: string, index: number) {
-		console.log("q7", Automato.indexInicial, index, linha[index]);
+		// console.log("q7", Automato.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, Automato.q7],
 			[["E", "e"], Automato.q8],
@@ -203,7 +203,7 @@ export class Automato {
 	}
 
 	private static q8(linha: string, index: number) {
-		console.log("q8", Automato.indexInicial, index, linha[index]);
+		// console.log("q8", Automato.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[[...Digitos, "+", "-"], Automato.q9],
 			[[...Simbolos, ...Letras], Automato.erroProximoCaractere],
@@ -222,7 +222,7 @@ export class Automato {
 	}
 
 	private static q9(linha: string, index: number) {
-		console.log("q9", Automato.indexInicial, index, linha[index]);
+		// console.log("q9", Automato.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, Automato.q9],
 			[[...Simbolos, " "], Automato.novoTokenReal],
@@ -247,7 +247,7 @@ export class Automato {
 	}
 
 	private static q11(linha: string, index: number) {
-		console.log("q11", Automato.indexInicial, index, linha[index]);
+		// console.log("q11", Automato.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[['"'], Automato.q12],
 			[[...Digitos, ...Letras, ...Simbolos, " "], Automato.q11],
@@ -265,7 +265,7 @@ export class Automato {
 	}
 
 	private static q12(linha: string, index: number) {
-		console.log("q12", Automato.indexInicial, index, linha[index]);
+		// console.log("q12", Automato.indexInicial, index, linha[index]);
 
 		const token: Token = {
 			classe: "literal",
@@ -282,7 +282,7 @@ export class Automato {
 	}
 
 	private static q13(linha: string, index: number) {
-		console.log("q13", Automato.indexInicial, index, linha[index]);
+		// console.log("q13", Automato.indexInicial, index, linha[index]);
 
 		const opcoes: OpcoesType[] = [
 			[[...Simbolos, " "], Automato.novoTokenid],
@@ -306,7 +306,7 @@ export class Automato {
 	}
 
 	private static q14(linha: string, index: number) {
-		console.log("q14", Automato.indexInicial, index, linha[index]);
+		// console.log("q14", Automato.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[["}"], Automato.q15],
 			[[...Digitos, ...Letras, ...Simbolos], Automato.q14],
@@ -320,11 +320,11 @@ export class Automato {
 	}
 
 	private static q15(linha: string, index: number) {
-		console.log("q15", Automato.indexInicial, index, linha[index]);
+		// console.log("q15", Automato.indexInicial, index, linha[index]);
 		const token: Token = {
 			classe: "comentario",
 			lexema: linha.substring(Automato.indexInicial, index + 1),
-			tipo: "comentario",
+			tipo: null,
 		};
 		Automato.tokens.push(token);
 		if (!linha[index]) {
@@ -335,7 +335,7 @@ export class Automato {
 	}
 
 	private static q16(linha: string, index: number) {
-		console.log("q16", Automato.indexInicial, index, linha[index]);
+		// console.log("q16", Automato.indexInicial, index, linha[index]);
 
 		const opcoes: OpcoesType[] = [
 			[["-"], Automato.q17],
@@ -349,7 +349,7 @@ export class Automato {
 			const token: Token = {
 				classe: "operador relacional",
 				lexema: linha.substring(Automato.indexInicial, index),
-				tipo: "operador relacional",
+				tipo: null,
 			};
 			Automato.tokens.push(token);
 			Automato.q0(linha, index);
@@ -362,7 +362,7 @@ export class Automato {
 
 	// Padronizar como q1 daqui pra baixo
 	private static q17(linha: string, index: number) {
-		console.log("q17", Automato.indexInicial, index, linha[index]);
+		// console.log("q17", Automato.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[[...Letras, ...Digitos, ...Simbolos, " "], Automato.novoTokenAtribuicao],
 		];
@@ -373,7 +373,7 @@ export class Automato {
 			const token: Token = {
 				classe: "atribuição",
 				lexema: linha.substring(Automato.indexInicial, index),
-				tipo: "atribuição",
+				tipo: null,
 			};
 			Automato.tokens.push(token);
 			Automato.q0(linha, index);
@@ -396,7 +396,7 @@ export class Automato {
 			const token: Token = {
 				classe: "operador relacional",
 				lexema: linha.substring(Automato.indexInicial, index),
-				tipo: "operador relacional",
+				tipo: null,
 			};
 			Automato.tokens.push(token);
 			Automato.q0(linha, index);
@@ -408,7 +408,7 @@ export class Automato {
 	}
 
 	private static q19(linha: string, index: number) {
-		console.log("q19", Automato.indexInicial, index, linha[index]);
+		// console.log("q19", Automato.indexInicial, index, linha[index]);
 
 		const token: Token = {
 			classe: "operador relacional",
@@ -423,11 +423,11 @@ export class Automato {
 	}
 
 	private static q20(linha: string, index: number) {
-		console.log("q20", Automato.indexInicial, index, linha[index]);
+		// console.log("q20", Automato.indexInicial, index, linha[index]);
 		const token: Token = {
 			classe: "operador aritmético",
 			lexema: linha.substring(Automato.indexInicial, index),
-			tipo: "operador aritmético",
+			tipo: null,
 		};
 		Automato.tokens.push(token);
 		if (!linha[index]) {
@@ -437,11 +437,11 @@ export class Automato {
 	}
 
 	private static q21(linha: string, index: number) {
-		console.log("q21", Automato.indexInicial, index, linha[index]);
+		// console.log("q21", Automato.indexInicial, index, linha[index]);
 		const token: Token = {
 			classe: "abre parenteses",
 			lexema: linha.substring(Automato.indexInicial, index),
-			tipo: "abre parenteses",
+			tipo: null,
 		};
 		Automato.tokens.push(token);
 		if (!linha[index]) {
@@ -451,11 +451,11 @@ export class Automato {
 	}
 
 	private static q22(linha: string, index: number) {
-		console.log("q22", Automato.indexInicial, index, linha[index]);
+		// console.log("q22", Automato.indexInicial, index, linha[index]);
 		const token: Token = {
 			classe: "fecha parenteses",
 			lexema: linha.substring(Automato.indexInicial, index),
-			tipo: "fecha parenteses",
+			tipo: null,
 		};
 		Automato.tokens.push(token);
 		if (!linha[index]) {
@@ -465,11 +465,11 @@ export class Automato {
 	}
 
 	private static q23(linha: string, index: number) {
-		console.log("q23", Automato.indexInicial, index, linha[index]);
+		// console.log("q23", Automato.indexInicial, index, linha[index]);
 		const token: Token = {
 			classe: "ponto e virgula",
 			lexema: linha.substring(Automato.indexInicial, index),
-			tipo: "ponto e virgula",
+			tipo: null,
 		};
 		Automato.tokens.push(token);
 		if (!linha[index]) {
@@ -479,11 +479,11 @@ export class Automato {
 	}
 
 	private static q24(linha: string, index: number) {
-		console.log("q24", Automato.indexInicial, index, linha[index]);
+		// console.log("q24", Automato.indexInicial, index, linha[index]);
 		const token: Token = {
 			classe: "vírgula",
 			lexema: linha.substring(Automato.indexInicial, index),
-			tipo: "vírgula",
+			tipo: null,
 		};
 		Automato.tokens.push(token);
 		if (!linha[index]) {
