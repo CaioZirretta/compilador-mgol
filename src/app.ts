@@ -14,7 +14,7 @@ function main(): void {
 	linhas = arquivo.split(os.EOL);
 
 	linhas.forEach((linha, index) => {
-		Automato.iniciar(linha, index + 1)
+		console.log(Automato.iniciar(linha, index + 1));
 	});
 }
 

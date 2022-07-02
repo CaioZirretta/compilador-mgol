@@ -15,7 +15,7 @@ export class Automato {
 	static indexInicial: number = 0;
 	static numeroLinha: number = 0;
 
-	static iniciar(linha: string, numeroLinha:number): ReturnType {
+	static iniciar(linha: string, numeroLinha: number): ReturnType {
 		Automato.tokens.length = 0;
 		Automato.erros.length = 0;
 		Automato.numeroLinha = numeroLinha;
@@ -356,27 +356,32 @@ export class Automato {
 			return;
 		}
 
-		index++;
+		index = linha === " " ? index : index + 1;
 		proximo!(linha, index);
 	}
 
 	// Padronizar como q1 daqui pra baixo
 	private static q17(linha: string, index: number) {
 		console.log("q17", Automato.indexInicial, index, linha[index]);
+		const opcoes: OpcoesType[] = [
+			[[...Letras, ...Digitos, ...Simbolos, " "], Automato.novoTokenAtribuicao],
+		];
 
+		const proximo = Automato.proximoEstado(opcoes, linha[index]);
 
-
-		const token: Token = {
-			classe: "atribuição",
-			lexema: linha.substring(Automato.indexInicial, index),
-			tipo: "atribuição",
-		};
-		Automato.tokens.push(token);
 		if (!linha[index]) {
+			const token: Token = {
+				classe: "atribuição",
+				lexema: linha.substring(Automato.indexInicial, index),
+				tipo: "atribuição",
+			};
+			Automato.tokens.push(token);
+			Automato.q0(linha, index);
 			return;
 		}
+
 		index++;
-		Automato.q0(linha, index);
+		proximo!(linha, index);
 	}
 
 	private static q18(linha: string, index: number) {
@@ -408,13 +413,12 @@ export class Automato {
 		const token: Token = {
 			classe: "operador relacional",
 			lexema: linha.substring(Automato.indexInicial, index),
-			tipo: "operador relacional",
+			tipo: null,
 		};
 		Automato.tokens.push(token);
 		if (!linha[index]) {
 			return;
 		}
-		// index++;
 		Automato.q0(linha, index);
 	}
 
@@ -558,6 +562,30 @@ export class Automato {
 		return;
 	}
 
+	private static novoTokenAtribuicao(linha: string, index: number) {
+		Automato.novoToken(linha, index, "atribuicao", -1);
+		Automato.q0(linha, index - 1);
+		return;
+	}
+
+	private static novoTokenOperadorRelacional(linha: string, index: number) {
+		Automato.novoToken(linha, index, "operador relacional", -1);
+		Automato.q0(linha, index - 1);
+		return;
+	}
+
+	private static novoToken(linha: string, index: number, classificacao: string, ajuste?: number) {
+		index = ajuste ? index + ajuste : index;
+		const token: Token = {
+			classe: classificacao,
+			lexema: linha.substring(Automato.indexInicial, index),
+			tipo: null,
+		};
+
+		Automato.tokens.push(token);
+		return;
+	}
+
 	// private static erroProximoCaractereSimbolo(linha: string, index: number) {
 	// 	const erro: ErroLexico = {
 	// 		mensagem: "Erro léxico, número inválido",
@@ -573,7 +601,7 @@ export class Automato {
 		const erro: ErroLexico = {
 			mensagem: "Erro léxico, número inválido",
 			linha: Automato.numeroLinha,
-			coluna: index ,
+			coluna: index,
 		};
 		Automato.erros.push(erro);
 
@@ -593,7 +621,7 @@ export class Automato {
 		const erro: ErroLexico = {
 			mensagem: "Erro léxico, número inválido",
 			linha: Automato.numeroLinha,
-			coluna: index ,
+			coluna: index,
 		};
 		Automato.erros.push(erro);
 

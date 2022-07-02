@@ -1,10 +1,8 @@
-import { Reservadas } from "./lexico/model/Simbolos";
 import { Automato } from "./lexico/model/Automato";
-import { TabelaDeSimbolos } from "./lexico/model/TabelaDeSimbolos";
 
 // -------------- 1.1 - Classificação de linhas -------------
 
-console.log(Automato.iniciar("12.2j+2", 1))
+console.log(Automato.iniciar("> A", 1))
 
 
 // -------------- 1.0 - Classificação de palavras -------------
