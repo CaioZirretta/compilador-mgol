@@ -42,4 +42,4 @@ export const enum TokenTipo {
 	Nulo = "nulo",
 }
 
-export const TokenList: Token[] = [];
+export const TokenLista: Token[] = [];

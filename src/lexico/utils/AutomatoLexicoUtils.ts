@@ -1,6 +1,7 @@
+import { TokenClasse, TokenTipo } from './../model/Token';
 import { Simbolos } from "../dicionario/Simbolos";
 import { AutomatoLexico, OpcoesType } from "../model/AutomatoLexico";
-import { ErroLexico } from "../model/ErrosLexicos";
+import { Token } from "../model/Token";
 
 export class AutomatoLexicoUtils {
 	static proximoEstado(opcoes: OpcoesType[], caractere: string) {
@@ -14,12 +15,12 @@ export class AutomatoLexicoUtils {
 	}
 
 	static erroProximoCaractere(linha: string, index: number) {
-		const erro: ErroLexico = {
-			mensagem: `Erro léxico, caractere inválido na linha ${AutomatoLexico.numeroLinha} e coluna ${index}`,
-			linha: AutomatoLexico.numeroLinha,
-			coluna: index,
+		const erro: Token = {
+			classe: TokenClasse.ERRO,
+			lexema: `Erro léxico: caractere inválido na linha ${AutomatoLexico.numeroLinha} e coluna ${index}`,
+			tipo: TokenTipo.Nulo,
 		};
-		AutomatoLexico.erros.push(erro);
+		AutomatoLexico.tokens.push(erro);
 
 		--index;
 		while (linha[index] && linha[index] !== " ") {
@@ -34,12 +35,12 @@ export class AutomatoLexicoUtils {
 	}
 
 	static erroProximoCaractereVazio(linha: string, index: number) {
-		const erro: ErroLexico = {
-			mensagem: `Erro léxico, caractere inválido na linha ${AutomatoLexico.numeroLinha} e coluna ${index}`,
-			linha: AutomatoLexico.numeroLinha,
-			coluna: index,
+		const erro: Token = {
+			classe: TokenClasse.ERRO,
+			lexema: `Erro léxico: caractere inválido na linha ${AutomatoLexico.numeroLinha} e coluna ${index}`,
+			tipo: TokenTipo.Nulo,
 		};
-		AutomatoLexico.erros.push(erro);
+		AutomatoLexico.tokens.push(erro);
 
 		--index;
 		while (linha[index] !== " ") {

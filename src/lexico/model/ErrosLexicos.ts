@@ -1,7 +1,3 @@
-export type ErroLexico = {
-	mensagem: string;
-	linha: number;
-	coluna: number;
-};
+import { Token } from "./Token";
 
-export const ErrosLexicos: ErroLexico[] = [];
+export const ErrosLista:Token[] = []
