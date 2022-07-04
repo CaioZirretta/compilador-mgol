@@ -23,7 +23,7 @@ export class AutomatoLexico {
 		AutomatoLexico.indexInicial = indexOpcional ? indexOpcional : 0;
 		index = AutomatoLexico.indexInicial;
 
-		// console.log("q0", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q0", AutomatoLexico.indexInicial, index, linha[index]);
 
 		if (!linha[index]) {
 			return AutomatoLexico.tokens;
@@ -48,7 +48,7 @@ export class AutomatoLexico {
 		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
 
 		if (!proximo) {
-			AutomatoLexicoUtils.erroProximoCaractere(linha, index);
+			AutomatoLexicoUtils.erroPrimeiroCaractere(linha, index);
 			return AutomatoLexico.tokens;
 		}
 
@@ -59,7 +59,7 @@ export class AutomatoLexico {
 	}
 
 	private static q1(linha: string, index: number) {
-		// console.log("q1", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q1", AutomatoLexico.indexInicial, index, linha[index]);
 
 		const opcoes: OpcoesType[] = [
 			[Digitos, AutomatoLexico.q1],
@@ -92,7 +92,7 @@ export class AutomatoLexico {
 	}
 
 	private static q2(linha: string, index: number) {
-		// console.log("q2", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q2", AutomatoLexico.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, AutomatoLexico.q4],
 			[["+"], AutomatoLexico.q3],
@@ -113,7 +113,7 @@ export class AutomatoLexico {
 	}
 
 	private static q3(linha: string, index: number) {
-		// console.log("q3", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q3", AutomatoLexico.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, AutomatoLexico.q4],
 			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroProximoCaractere],
@@ -132,7 +132,7 @@ export class AutomatoLexico {
 	}
 
 	private static q4(linha: string, index: number) {
-		// console.log("q4", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q4", AutomatoLexico.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, AutomatoLexico.q4],
 			[[...Simbolos, " "], TokenUtils.novoTokenInteiro],
@@ -161,7 +161,7 @@ export class AutomatoLexico {
 	}
 
 	private static q5(linha: string, index: number) {
-		// console.log("q5", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q5", AutomatoLexico.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, AutomatoLexico.q9],
 			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroProximoCaractere],
@@ -180,7 +180,7 @@ export class AutomatoLexico {
 	}
 
 	private static q6(linha: string, index: number) {
-		// console.log("q6", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q6", AutomatoLexico.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, AutomatoLexico.q7],
 			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroProximoCaractere],
@@ -199,7 +199,7 @@ export class AutomatoLexico {
 	}
 
 	private static q7(linha: string, index: number) {
-		// console.log("q7", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q7", AutomatoLexico.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, AutomatoLexico.q7],
 			[["E", "e"], AutomatoLexico.q8],
@@ -229,7 +229,7 @@ export class AutomatoLexico {
 	}
 
 	private static q8(linha: string, index: number) {
-		// console.log("q8", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q8", AutomatoLexico.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, AutomatoLexico.q9],
 			[["+", "-"], AutomatoLexico.q25],
@@ -249,7 +249,7 @@ export class AutomatoLexico {
 	}
 
 	private static q9(linha: string, index: number) {
-		// console.log("q9", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q9", AutomatoLexico.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, AutomatoLexico.q9],
 			[[...Simbolos, " "], TokenUtils.novoTokenReal],
@@ -274,7 +274,7 @@ export class AutomatoLexico {
 	}
 
 	private static q11(linha: string, index: number) {
-		// console.log("q11", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q11", AutomatoLexico.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[['"'], AutomatoLexico.q12],
 			[[...Digitos, ...Letras, ...Simbolos, " "], AutomatoLexico.q11],
@@ -293,7 +293,7 @@ export class AutomatoLexico {
 	}
 
 	private static q12(linha: string, index: number) {
-		// console.log("q12", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q12", AutomatoLexico.indexInicial, index, linha[index]);
 
 		const token: Token = {
 			classe: TokenClasse.Lit,
@@ -311,7 +311,7 @@ export class AutomatoLexico {
 	}
 
 	private static q13(linha: string, index: number) {
-		// console.log("q13", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q13", AutomatoLexico.indexInicial, index, linha[index]);
 
 		const opcoes: OpcoesType[] = [
 			[[...Simbolos, " "], TokenUtils.novoTokenid],
@@ -345,7 +345,7 @@ export class AutomatoLexico {
 	}
 
 	private static q14(linha: string, index: number) {
-		// console.log("q14", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q14", AutomatoLexico.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[["}"], AutomatoLexico.q15],
 			[[...Digitos, ...Letras, ...Simbolos], AutomatoLexico.q14],
@@ -364,7 +364,7 @@ export class AutomatoLexico {
 	}
 
 	private static q15(linha: string, index: number) {
-		// console.log("q15", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q15", AutomatoLexico.indexInicial, index, linha[index]);
 		const token: Token = {
 			classe: TokenClasse.Comentario,
 			lexema: linha.substring(AutomatoLexico.indexInicial, index + 1),
@@ -381,7 +381,7 @@ export class AutomatoLexico {
 	}
 
 	private static q16(linha: string, index: number) {
-		// console.log("q16", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q16", AutomatoLexico.indexInicial, index, linha[index]);
 
 		const opcoes: OpcoesType[] = [
 			[["-"], AutomatoLexico.q17],
@@ -417,7 +417,7 @@ export class AutomatoLexico {
 	}
 
 	private static q17(linha: string, index: number) {
-		// console.log("q17", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q17", AutomatoLexico.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[[...Letras, ...Digitos, ...Simbolos, " "], TokenUtils.novoTokenAtribuicao],
 		];
@@ -463,7 +463,7 @@ export class AutomatoLexico {
 	}
 
 	private static q19(linha: string, index: number) {
-		// console.log("q19", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q19", AutomatoLexico.indexInicial, index, linha[index]);
 
 		const token: Token = {
 			classe: TokenClasse.OPR,
@@ -478,7 +478,7 @@ export class AutomatoLexico {
 	}
 
 	private static q20(linha: string, index: number) {
-		// console.log("q20", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q20", AutomatoLexico.indexInicial, index, linha[index]);
 		const token: Token = {
 			classe: TokenClasse.OPM,
 			lexema: linha.substring(AutomatoLexico.indexInicial, index),
@@ -492,7 +492,7 @@ export class AutomatoLexico {
 	}
 
 	private static q21(linha: string, index: number) {
-		// console.log("q21", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q21", AutomatoLexico.indexInicial, index, linha[index]);
 		const token: Token = {
 			classe: TokenClasse.AB_P,
 			lexema: linha.substring(AutomatoLexico.indexInicial, index),
@@ -506,7 +506,7 @@ export class AutomatoLexico {
 	}
 
 	private static q22(linha: string, index: number) {
-		// console.log("q22", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q22", AutomatoLexico.indexInicial, index, linha[index]);
 		const token: Token = {
 			classe: TokenClasse.FC_P,
 			lexema: linha.substring(AutomatoLexico.indexInicial, index),
@@ -520,7 +520,7 @@ export class AutomatoLexico {
 	}
 
 	private static q23(linha: string, index: number) {
-		// console.log("q23", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q23", AutomatoLexico.indexInicial, index, linha[index]);
 		const token: Token = {
 			classe: TokenClasse.PT_V,
 			lexema: linha.substring(AutomatoLexico.indexInicial, index),
@@ -534,7 +534,7 @@ export class AutomatoLexico {
 	}
 
 	private static q24(linha: string, index: number) {
-		// console.log("q24", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q24", AutomatoLexico.indexInicial, index, linha[index]);
 		const token: Token = {
 			classe: TokenClasse.Vir,
 			lexema: linha.substring(AutomatoLexico.indexInicial, index),
@@ -548,7 +548,7 @@ export class AutomatoLexico {
 	}
 
 	private static q25(linha: string, index: number) {
-		// console.log("q25", AutomatoLexico.indexInicial, index, linha[index]);
+		console.log("q25", AutomatoLexico.indexInicial, index, linha[index]);
 		const opcoes: OpcoesType[] = [
 			[Digitos, AutomatoLexico.q9],
 			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroProximoCaractere],

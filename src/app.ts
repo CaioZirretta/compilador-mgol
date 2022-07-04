@@ -7,7 +7,7 @@ function main(): void {
 	let arquivo: string;
 	let linhas: string[];
 
-	arquivo = fs.readFileSync(__dirname + "/assets/FONTE.txt", "utf-8");
+	arquivo = fs.readFileSync(__dirname + "/resources/FONTE.txt", "utf-8");
 	linhas = arquivo.split(os.EOL);
 
 	linhas.forEach((linha, index) => {

@@ -1,4 +1,4 @@
-import { Token } from "./../../../lexico/model/Token";
+import { Token } from "../../../lexico/model/Token";
 import { AutomatoLexico } from "../../../lexico/model/AutomatoLexico";
 
 describe("Testes com uma palavra só", () => {
@@ -368,7 +368,7 @@ describe("Testes com uma palavra só", () => {
 });
 
 describe("Testes com frases", () => {
-	it("Frase inválida", () => {
+	it("Frase válida", () => {
 		const linha = "inicio se(B>A)A<-1;fimse";
 		const token: Token[] = AutomatoLexico.iniciar(linha, 1);
 		expect(token).toBeInstanceOf(Array);
@@ -377,4 +377,13 @@ describe("Testes com frases", () => {
 			expect(t.classe).not.toBe("ERRO");
 		})
 	});
+	// it("Frase inválida", () => {
+	// 	const linha = "1.2e+!fecha);.,";
+	// 	const token: Token[] = AutomatoLexico.iniciar(linha, 1);
+	// 	expect(token).toBeInstanceOf(Array);
+	// 	expect(token.length).toBeGreaterThan(0);
+	// 	token.forEach(t => {
+	// 		expect(t.classe).not.toBe("ERRO");
+	// 	})
+	// });
 });

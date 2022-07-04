@@ -1,4 +1,4 @@
-import { TokenClasse, TokenTipo } from './../model/Token';
+import { TokenClasse, TokenTipo } from "../model/Token";
 import { Simbolos } from "../dicionario/Simbolos";
 import { AutomatoLexico, OpcoesType } from "../model/AutomatoLexico";
 import { Token } from "../model/Token";
@@ -23,6 +23,26 @@ export class AutomatoLexicoUtils {
 		AutomatoLexico.tokens.push(erro);
 
 		--index;
+		while (linha[index] && linha[index] !== " ") {
+			if (Simbolos.includes(linha[index])) {
+				AutomatoLexico.q0(linha, index);
+				return;
+			}
+			index++;
+		}
+		index = index <= 0 ? 2 : index;
+		AutomatoLexico.q0(linha, index);
+		return;
+	}
+
+	static erroPrimeiroCaractere(linha: string, index: number) {
+		const erro: Token = {
+			classe: TokenClasse.ERRO,
+			lexema: `Erro léxico: caractere inválido na linha ${AutomatoLexico.numeroLinha} e coluna ${index}`,
+			tipo: TokenTipo.Nulo,
+		};
+		AutomatoLexico.tokens.push(erro);
+		index++;
 		while (linha[index] && linha[index] !== " ") {
 			if (Simbolos.includes(linha[index])) {
 				AutomatoLexico.q0(linha, index);

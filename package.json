@@ -6,8 +6,7 @@
   "scripts": {
     "scratch": "ts-node-dev ./src/test/scratch.ts",
     "test": "jest",
-    "dev": "ts-node-dev ./src/app",
-    "compile": "npx tsc"
+    "dev": "ts-node-dev ./src/app"
   },
   "repository": {
     "type": "git",
