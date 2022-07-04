@@ -30,7 +30,6 @@ export class AutomatoLexicoUtils {
 			}
 			index++;
 		}
-		index = index <= 0 ? 2 : index;
 		AutomatoLexico.q0(linha, index);
 		return;
 	}
@@ -42,14 +41,8 @@ export class AutomatoLexicoUtils {
 			tipo: TokenTipo.Nulo,
 		};
 		AutomatoLexico.tokens.push(erro);
+		
 		index++;
-		while (linha[index] && linha[index] !== " ") {
-			if (Simbolos.includes(linha[index])) {
-				AutomatoLexico.q0(linha, index);
-				return;
-			}
-			index++;
-		}
 		AutomatoLexico.q0(linha, index);
 		return;
 	}

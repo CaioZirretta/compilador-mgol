@@ -1,5 +1,5 @@
 import { AutomatoLexico } from '../lexico/model/AutomatoLexico';
 
-console.log(AutomatoLexico.iniciar("! fecha);.,", 1));
+console.log(AutomatoLexico.iniciar("10! 2", 1));
 
 

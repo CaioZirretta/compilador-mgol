@@ -377,13 +377,4 @@ describe("Testes com frases", () => {
 			expect(t.classe).not.toBe("ERRO");
 		})
 	});
-	// it("Frase inválida", () => {
-	// 	const linha = "1.2e+!fecha);.,";
-	// 	const token: Token[] = AutomatoLexico.iniciar(linha, 1);
-	// 	expect(token).toBeInstanceOf(Array);
-	// 	expect(token.length).toBeGreaterThan(0);
-	// 	token.forEach(t => {
-	// 		expect(t.classe).not.toBe("ERRO");
-	// 	})
-	// });
 });
