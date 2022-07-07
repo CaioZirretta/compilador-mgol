@@ -9,7 +9,6 @@ export class AutomatoLexico {
 	static indexAuxiliar: number = 0;
 	static indexGeral: number = 0;
 
-	static colunaInicial: number = 1;
 	static coluna: number = 1;
 	static linha: number = 1;
 
@@ -43,14 +42,14 @@ export class AutomatoLexico {
 		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
 
 		if (!proximo) {
-			AutomatoLexico.indexGeral++;
+			AutomatoLexicoUtils.aumentarIndex();
 			if (arquivo[AutomatoLexico.indexGeral - 1]) {
 				return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
 			}
 			return TokenUtils.tokenEOF();
 		}
 
-		proximo === AutomatoLexicoUtils.ignorar ? 0 : AutomatoLexico.indexGeral++;
+		proximo === AutomatoLexicoUtils.ignorar ? 0 : AutomatoLexicoUtils.aumentarIndex();
 		return proximo(arquivo);
 	}
 
@@ -76,7 +75,7 @@ export class AutomatoLexico {
 			return AutomatoLexicoUtils.erroAteSimbolo(arquivo);
 		}
 
-		proximo === TokenUtils.novoTokenInteiro ? null : AutomatoLexico.indexGeral++;
+		proximo === TokenUtils.novoTokenInteiro ? null : AutomatoLexicoUtils.aumentarIndex();
 		return proximo(arquivo);
 	}
 
@@ -98,7 +97,7 @@ export class AutomatoLexico {
 			return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
 		}
 
-		proximo === AutomatoLexicoUtils.erroContinuaLeitura ? AutomatoLexico.indexGeral-- : null;
+		proximo === AutomatoLexicoUtils.erroContinuaLeitura ? AutomatoLexicoUtils.diminuirIndex() : null;
 		return proximo(arquivo);
 	}
 
@@ -118,7 +117,7 @@ export class AutomatoLexico {
 			return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
 		}
 
-		AutomatoLexico.indexGeral++;
+		AutomatoLexicoUtils.aumentarIndex();
 		return proximo(arquivo);
 	}
 
@@ -136,13 +135,13 @@ export class AutomatoLexico {
 
 		if (!proximo) {
 			if (arquivo[AutomatoLexico.indexGeral]) {
-				AutomatoLexico.indexGeral++;
+				AutomatoLexicoUtils.aumentarIndex();
 				return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
 			}
 			return TokenUtils.novoTokenInteiro(arquivo);
 		}
 
-		proximo === TokenUtils.novoTokenInteiro ? null : AutomatoLexico.indexGeral++;
+		proximo === TokenUtils.novoTokenInteiro ? null : AutomatoLexicoUtils.aumentarIndex();
 		return proximo(arquivo);
 	}
 
@@ -162,7 +161,7 @@ export class AutomatoLexico {
 			return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
 		}
 
-		AutomatoLexico.indexGeral++;
+		AutomatoLexicoUtils.aumentarIndex();
 		return proximo(arquivo);
 	}
 
@@ -182,7 +181,7 @@ export class AutomatoLexico {
 			return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
 		}
 
-		AutomatoLexico.indexGeral++;
+		AutomatoLexicoUtils.aumentarIndex();
 		return proximo(arquivo);
 	}
 
@@ -208,7 +207,7 @@ export class AutomatoLexico {
 			return token;
 		}
 
-		proximo === TokenUtils.novoTokenReal ? null : AutomatoLexico.indexGeral++;
+		proximo === TokenUtils.novoTokenReal ? null : AutomatoLexicoUtils.aumentarIndex();
 		return proximo(arquivo);
 	}
 
@@ -229,7 +228,7 @@ export class AutomatoLexico {
 			return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
 		}
 
-		AutomatoLexico.indexGeral++;
+		AutomatoLexicoUtils.aumentarIndex();
 		return proximo(arquivo);
 	}
 
@@ -247,13 +246,13 @@ export class AutomatoLexico {
 
 		if (!proximo) {
 			if (arquivo[AutomatoLexico.indexGeral]) {
-				AutomatoLexico.indexGeral++;
+				AutomatoLexicoUtils.aumentarIndex();
 				return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
 			}
 			return TokenUtils.novoTokenReal(arquivo);
 		}
 
-		proximo === TokenUtils.novoTokenReal ? null : AutomatoLexico.indexGeral++;
+		proximo === TokenUtils.novoTokenReal ? null : AutomatoLexicoUtils.aumentarIndex();
 		return proximo(arquivo);
 	}
 
@@ -271,13 +270,13 @@ export class AutomatoLexico {
 
 		if (!proximo) {
 			if (arquivo[AutomatoLexico.indexGeral]) {
-				AutomatoLexico.indexGeral++;
+				AutomatoLexicoUtils.aumentarIndex();
 				return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
 			}
 			return TokenUtils.novoTokenReal(arquivo);
 		}
 
-		proximo === TokenUtils.novoTokenReal ? null : AutomatoLexico.indexGeral++;
+		proximo === TokenUtils.novoTokenReal ? null : AutomatoLexicoUtils.aumentarIndex();
 		return proximo(arquivo);
 	}
 
@@ -296,7 +295,7 @@ export class AutomatoLexico {
 			return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
 		}
 
-		AutomatoLexico.indexGeral++;
+		AutomatoLexicoUtils.aumentarIndex();
 		return proximo(arquivo);
 	}
 
@@ -328,13 +327,13 @@ export class AutomatoLexico {
 
 		if (!proximo) {
 			if (arquivo[AutomatoLexico.indexGeral]) {
-				AutomatoLexico.indexGeral++;
+				AutomatoLexicoUtils.aumentarIndex();
 				return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
 			}
 			return TokenUtils.novoTokenId(arquivo);
 		}
 
-		AutomatoLexico.indexGeral++;
+		AutomatoLexicoUtils.aumentarIndex();
 		return proximo(arquivo);
 	}
 
@@ -353,7 +352,7 @@ export class AutomatoLexico {
 			return AutomatoLexicoUtils.erroAteSimbolo(arquivo);
 		}
 
-		AutomatoLexico.indexGeral++;
+		AutomatoLexicoUtils.aumentarIndex();
 		return proximo(arquivo);
 	}
 
@@ -433,7 +432,7 @@ export class AutomatoLexico {
 			return token;
 		}
 
-		proximo === AutomatoLexicoUtils.ignorar ? null : AutomatoLexico.indexGeral++;
+		proximo === AutomatoLexicoUtils.ignorar ? null : AutomatoLexicoUtils.aumentarIndex();
 		return proximo(arquivo);
 	}
 

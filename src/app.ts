@@ -7,9 +7,9 @@ export const arquivoFonte: string = fs.readFileSync(__dirname + "/resources/test
 
 function main(): void {
 	do {
-		// const retorno: Token | void = AnalisadorLexico.scanner(arquivoFonte);
-		// retorno ? console.log(retorno) : null;
-		AnalisadorLexico.scanner(arquivoFonte);
+		const retorno: Token | void = AnalisadorLexico.scanner(arquivoFonte);
+		retorno ? console.log(retorno) : null;
+		// AnalisadorLexico.scanner(arquivoFonte);
 	} while (AutomatoLexico.indexGeral <= arquivoFonte.length);
 }
 

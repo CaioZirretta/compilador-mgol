@@ -18,20 +18,18 @@ export class AutomatoLexicoUtils {
 		if (arquivo[AutomatoLexico.indexGeral] === "\n") {
 			AutomatoLexico.linha++;
 			AutomatoLexico.coluna = 1;
-		} else if(arquivo[AutomatoLexico.indexGeral] !== "\r"){
-			console.log("coluna++")
-			AutomatoLexico.coluna++;
 		}
 	}
 
-	static aumentarIndex(){
-		AutomatoLexico.indexGeral++
+	static aumentarIndex() {
+		AutomatoLexico.indexGeral++;
 		AutomatoLexico.coluna++;
 	}
 
-	// static atualizaColuna() {
-	// 	AutomatoLexico.coluna = AutomatoLexico.indexGeral - AutomatoLexico.indexAuxiliar;
-	// }
+	static diminuirIndex() {
+		AutomatoLexico.indexGeral--;
+		AutomatoLexico.coluna--;
+	}
 
 	static log(arquivo: string, estado: string) {
 		let char;
@@ -57,7 +55,8 @@ export class AutomatoLexicoUtils {
 			estado,
 			"| Geral: " + AutomatoLexico.indexGeral,
 			"| Auxiliar: " + AutomatoLexico.indexAuxiliar,
-			"| Letra: " + char
+			"| Coluna: " + AutomatoLexico.coluna,
+			"| Letra: " + char,
 		);
 	}
 

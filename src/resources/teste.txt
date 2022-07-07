@@ -1,2 +1,2 @@
-var fim 2j
+var fim 2j escreva 2x
 ye!
