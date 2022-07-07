@@ -1,14 +1,103 @@
+import { Simbolos } from "./../dicionario/Simbolos";
+import { arquivoFonte } from "./../../app";
+import { AutomatoLexicoUtils } from "./AutomatoLexicoUtils";
 import { Reservadas } from "../dicionario/Simbolos";
 import { AutomatoLexico } from "../model/AutomatoLexico";
 import { TabelaDeSimbolos } from "../model/TabelaDeSimbolos";
 import { Token, TokenClasse, TokenTipo } from "../model/Token";
 
 export class TokenUtils {
+	static tokenEOF() {
+		if (AutomatoLexico.indexGeral > arquivoFonte.length)
+			return {
+				classe: TokenClasse.EOF,
+				lexema: "EOF",
+				tipo: TokenTipo.Nulo,
+			} as Token;
+	}
+
+	static novoTokenId(arquivo: string) {
+		const ajuste =
+			Simbolos.includes(arquivo[AutomatoLexico.indexGeral - 1]) ||
+			arquivo[AutomatoLexico.indexGeral - 1] === " "
+				? -1
+				: 0;
+
+		let palavra = arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral + ajuste);
+
+		const token: Token = TokenUtils.inserirToken(palavra);
+
+		token.lexema = TokenUtils.formatarToken(token);
+
+		if (arquivo[AutomatoLexico.indexGeral] === "\n") {
+			AutomatoLexicoUtils.quebraDeLinha();
+		}
+
+		AutomatoLexico.indexGeral += ajuste;
+
+		return token;
+	}
+
+	static novoTokenInteiro(arquivo: string) {
+		const token: Token = {
+			classe: TokenClasse.Num,
+			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
+			tipo: TokenTipo.Inteiro,
+		};
+
+		if (arquivo[AutomatoLexico.indexGeral] === "\n") {
+			AutomatoLexicoUtils.quebraDeLinha();
+		}
+
+		token.lexema = TokenUtils.formatarToken(token);
+
+		return token;
+	}
+
+	static novoTokenReal(arquivo: string) {
+		const token: Token = {
+			classe: TokenClasse.real,
+			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
+			tipo: TokenTipo.Real,
+		};
+
+		if (arquivo[AutomatoLexico.indexGeral] === "\n") {
+			AutomatoLexicoUtils.quebraDeLinha();
+		}
+
+		token.lexema = TokenUtils.formatarToken(token);
+
+		return token;
+	}
+
+	static quebraDeLinhaId(arquivo: string) {
+		let palavra = arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral);
+
+		const token: Token = TokenUtils.inserirToken(palavra);
+
+		AutomatoLexico.indexGeral++;
+
+		if (arquivo[AutomatoLexico.indexGeral] === "\n") {
+			AutomatoLexicoUtils.quebraDeLinha();
+		}
+
+		return token;
+	}
+
+	static formatarToken(token: Token) {
+		let lexema = token.lexema;
+
+		lexema = lexema.replaceAll("\n", "");
+		lexema = lexema.replaceAll("\r", "");
+
+		return lexema;
+	}
+
 	static eReservada(palavra: string) {
 		return Reservadas.includes(palavra);
 	}
 
-	static tokenReservado(palavra: string): Token {
+	private static tokenReservado(palavra: string): Token {
 		let novoToken: Token;
 
 		TabelaDeSimbolos.some((token) => {
@@ -21,7 +110,7 @@ export class TokenUtils {
 		return novoToken!;
 	}
 
-	static inserirToken(palavra: string) {
+	private static inserirToken(palavra: string) {
 		let token: Token;
 		if (TokenUtils.eReservada(palavra)) {
 			token = TokenUtils.tokenReservado(palavra);
@@ -29,61 +118,5 @@ export class TokenUtils {
 		}
 		token = { classe: TokenClasse.id, lexema: palavra, tipo: TokenTipo.Nulo };
 		return token;
-	}
-
-	static novoTokenReal(linha: string, index: number) {
-		const token: Token = {
-			classe: TokenClasse.Num,
-			lexema: linha.substring(AutomatoLexico.indexInicial, index - 1),
-			tipo: TokenTipo.Real,
-		};
-		AutomatoLexico.tokens.push(token);
-		AutomatoLexico.q0(linha, index - 1);
-		return;
-	}
-
-	static novoTokenInteiro(linha: string, index: number) {
-		const token: Token = {
-			classe: TokenClasse.Num,
-			lexema: linha.substring(AutomatoLexico.indexInicial, index - 1),
-			tipo: TokenTipo.Inteiro,
-		};
-		AutomatoLexico.tokens.push(token);
-		AutomatoLexico.q0(linha, index - 1);
-		return;
-	}
-
-	static novoTokenid(linha: string, index: number) {
-		let token: Token;
-		let linhaN = linha.substring(AutomatoLexico.indexInicial, index - 1);
-
-		token = TokenUtils.inserirToken(linhaN);
-
-		AutomatoLexico.tokens.push(token);
-		AutomatoLexico.q0(linha, index - 1);
-		return;
-	}
-
-	static novoTokenAtribuicao(linha: string, index: number) {
-		const token: Token = {
-			classe: TokenClasse.RCB,
-			lexema: linha.substring(AutomatoLexico.indexInicial, index - 1),
-			tipo: TokenTipo.Nulo,
-		};
-
-		AutomatoLexico.tokens.push(token);
-
-		AutomatoLexico.q0(linha, index - 1);
-		return;
-	}
-
-	static tokenEOF() {
-		const tokenEOF: Token = {
-			classe: TokenClasse.EOF,
-			lexema: "EOF",
-			tipo: TokenTipo.Nulo,
-		};
-		AutomatoLexico.tokens.push(tokenEOF);
-		return;
 	}
 }

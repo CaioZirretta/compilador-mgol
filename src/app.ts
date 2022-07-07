@@ -1,19 +1,15 @@
+import { AutomatoLexico } from "./lexico/model/AutomatoLexico";
 import { AnalisadorLexico } from "./lexico/AnalisadorLexico";
 import * as fs from "fs";
-import * as os from "os";
 import { Token } from "./lexico/model/Token";
 
+export const arquivoFonte: string = fs.readFileSync(__dirname + "/resources/teste.txt", "utf-8");
+
 function main(): void {
-	let arquivo: string;
-	let linhas: string[];
-
-	arquivo = fs.readFileSync(__dirname + "/resources/FONTE.txt", "utf-8");
-	linhas = arquivo.split(os.EOL);
-
-	linhas.forEach((linha, index) => {
-		const tokens: Token[] = AnalisadorLexico.scanner(linha, index);
-		console.log(linha, tokens);
-	});
+	do {
+		const retorno: Token | void = AnalisadorLexico.scanner(arquivoFonte);
+		retorno ? console.log(retorno) : null;
+	} while (AutomatoLexico.indexGeral <= arquivoFonte.length);
 }
 
 main();

@@ -1,37 +1,30 @@
-import { TabelaDeSimbolos } from "./TabelaDeSimbolos";
 import { Digitos, Letras, Simbolos } from "../dicionario/Simbolos";
 import { Token, TokenClasse, TokenTipo } from "./Token";
 import { TokenUtils } from "../utils/TokenUtils";
 import { AutomatoLexicoUtils } from "../utils/AutomatoLexicoUtils";
 
-export type OpcoesType = [expr: string[], estado: (linha: string, index: number) => void];
+export type TransicoesType = [expr: string[], estado: (arquivo: string) => void];
 
 export class AutomatoLexico {
-	static tokens: Token[] = [];
-	static indexInicial: number = 0;
-	static numeroLinha: number = 0;
+	static indexAuxiliar: number = 0;
+	static indexGeral: number = 0;
 
-	static iniciar(linha: string, numeroLinha: number): Token[] {
-		AutomatoLexico.tokens.length = 0;
-		AutomatoLexico.numeroLinha = numeroLinha;
-		return this.q0(linha);
+	static coluna: number = 1;
+	static linha: number = 1;
+
+	static iniciar(arquivo: string): Token | void {
+		console.log("\n============ Automato iniciando =============");
+		return this.q0(arquivo);
 	}
 
-	static q0(linha: string, indexOpcional?: number): Token[] {
-		let index: number = 0;
+	static q0(arquivo: string): Token | void {
+		AutomatoLexicoUtils.log(arquivo, "q0");
 
-		AutomatoLexico.indexInicial = indexOpcional ? indexOpcional : 0;
-		index = AutomatoLexico.indexInicial;
+		AutomatoLexico.indexAuxiliar = AutomatoLexico.indexGeral;
 
-		console.log("q0", AutomatoLexico.indexInicial, index, linha[index]);
-
-		if (!linha[index]) {
-			return AutomatoLexico.tokens;
-		}
-
-		const opcoes: OpcoesType[] = [
+		const transicoes: TransicoesType[] = [
+			[[" ", "\n", "\r"], AutomatoLexicoUtils.ignorar],
 			[['"'], AutomatoLexico.q11],
-			[[" "], AutomatoLexico.q0],
 			[["{"], AutomatoLexico.q14],
 			[["<"], AutomatoLexico.q16],
 			[[">"], AutomatoLexico.q18],
@@ -45,524 +38,454 @@ export class AutomatoLexico {
 			[Letras, AutomatoLexico.q13],
 		];
 
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
+		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
 
 		if (!proximo) {
-			AutomatoLexicoUtils.erroPrimeiroCaractere(linha, index);
-			return AutomatoLexico.tokens;
+			AutomatoLexico.indexGeral++;
+			if (arquivo[AutomatoLexico.indexGeral - 1]) {
+				return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
+			}
+			return TokenUtils.tokenEOF();
 		}
 
-		index++;
-		proximo!(linha, index);
-
-		return AutomatoLexico.tokens;
+		proximo === AutomatoLexicoUtils.ignorar ? 0 : AutomatoLexico.indexGeral++;
+		return proximo(arquivo);
 	}
 
-	private static q1(linha: string, index: number) {
-		console.log("q1", AutomatoLexico.indexInicial, index, linha[index]);
+	private static q1(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q1");
 
-		const opcoes: OpcoesType[] = [
+		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q1],
-			[[...Simbolos, " "], TokenUtils.novoTokenInteiro],
+			[[...Simbolos, " ", "\r", "\n"], TokenUtils.novoTokenInteiro],
 			[["."], AutomatoLexico.q6],
 			[["E", "e"], AutomatoLexico.q2],
-			[Letras, AutomatoLexicoUtils.erroProximoCaractere],
+			[Letras, AutomatoLexicoUtils.erroAteSimbolo],
 		];
 
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
+		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
 
-		if (!linha[index]) {
-			const token: Token = {
-				classe: TokenClasse.Num,
-				lexema: linha.substring(AutomatoLexico.indexInicial, index),
-				tipo: TokenTipo.Inteiro,
-			};
-			AutomatoLexico.tokens.push(token);
-
-			return;
+		if (!arquivo[AutomatoLexico.indexGeral]) {
+			return TokenUtils.novoTokenInteiro(arquivo);
 		}
 
 		if (!proximo) {
-			AutomatoLexicoUtils.erroProximoCaractere(linha, index);
-			return;
+			return AutomatoLexicoUtils.erroAteSimbolo(arquivo);
 		}
 
-		index++;
-		proximo!(linha, index);
+		proximo === TokenUtils.novoTokenInteiro ? null : AutomatoLexico.indexGeral++;
+		return proximo(arquivo);
 	}
 
-	private static q2(linha: string, index: number) {
-		console.log("q2", AutomatoLexico.indexInicial, index, linha[index]);
-		const opcoes: OpcoesType[] = [
+	private static q2(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q2");
+
+		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q4],
 			[["+"], AutomatoLexico.q3],
 			[["-"], AutomatoLexico.q5],
-			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroProximoCaractere],
-			[[" "], AutomatoLexicoUtils.erroProximoCaractereVazio],
+			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroAteSimbolo],
+			[[" ", "\r", "\n"], AutomatoLexicoUtils.erroContinuaLeitura],
 		];
 
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
+		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
 
 		if (!proximo) {
-			AutomatoLexicoUtils.erroProximoCaractere(linha, index);
-			return;
+			return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
 		}
 
-		index++;
-		proximo!(linha, index);
+		proximo === AutomatoLexicoUtils.erroContinuaLeitura ? AutomatoLexico.indexGeral-- : null;
+		return proximo(arquivo);
 	}
 
-	private static q3(linha: string, index: number) {
-		console.log("q3", AutomatoLexico.indexInicial, index, linha[index]);
-		const opcoes: OpcoesType[] = [
+	private static q3(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q3");
+
+		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q4],
-			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroProximoCaractere],
-			[[" "], AutomatoLexicoUtils.erroProximoCaractereVazio],
+			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroAteSimbolo],
+			[[" ", "\r", "\n"], AutomatoLexicoUtils.erroContinuaLeitura],
 		];
 
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
-
-		if (!proximo || !linha[index]) {
-			AutomatoLexicoUtils.erroProximoCaractere(linha, index);
-			return;
-		}
-
-		index++;
-		proximo!(linha, index);
-	}
-
-	private static q4(linha: string, index: number) {
-		console.log("q4", AutomatoLexico.indexInicial, index, linha[index]);
-		const opcoes: OpcoesType[] = [
-			[Digitos, AutomatoLexico.q4],
-			[[...Simbolos, " "], TokenUtils.novoTokenInteiro],
-			[Letras, AutomatoLexicoUtils.erroProximoCaractere],
-		];
-
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
-
-		if (!linha[index]) {
-			const token: Token = {
-				classe: TokenClasse.Num,
-				lexema: linha.substring(AutomatoLexico.indexInicial, index),
-				tipo: TokenTipo.Inteiro,
-			};
-			AutomatoLexico.tokens.push(token);
-			return;
-		}
+		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
 
 		if (!proximo) {
-			AutomatoLexicoUtils.erroProximoCaractere(linha, index);
-			return;
+			return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
 		}
 
-		index++;
-		proximo!(linha, index);
+		AutomatoLexico.indexGeral++;
+		return proximo(arquivo);
 	}
 
-	private static q5(linha: string, index: number) {
-		console.log("q5", AutomatoLexico.indexInicial, index, linha[index]);
-		const opcoes: OpcoesType[] = [
-			[Digitos, AutomatoLexico.q9],
-			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroProximoCaractere],
-			[[" "], AutomatoLexicoUtils.erroProximoCaractereVazio],
+	private static q4(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q4");
+
+		const transicoes: TransicoesType[] = [
+			[Digitos, AutomatoLexico.q4],
+			[[...Simbolos, " ", "\r", "\n"], TokenUtils.novoTokenInteiro],
+			[Letras, AutomatoLexicoUtils.erroAteSimbolo],
 		];
 
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
+		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
 
-		if (!proximo || !linha[index]) {
-			AutomatoLexicoUtils.erroProximoCaractere(linha, index);
-			return;
+		if (!proximo) {
+			if (arquivo[AutomatoLexico.indexGeral]) {
+				AutomatoLexico.indexGeral++;
+				return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
+			}
+			return TokenUtils.novoTokenInteiro(arquivo);
 		}
 
-		index++;
-		proximo!(linha, index);
+		proximo === TokenUtils.novoTokenInteiro ? null : AutomatoLexico.indexGeral++;
+		return proximo(arquivo);
 	}
 
-	private static q6(linha: string, index: number) {
-		console.log("q6", AutomatoLexico.indexInicial, index, linha[index]);
-		const opcoes: OpcoesType[] = [
+	private static q5(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q5");
+
+		const transicoes: TransicoesType[] = [
+			[Digitos, AutomatoLexico.q10],
+			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroAteSimbolo],
+			[[" ", "\r", "\n"], AutomatoLexicoUtils.erroContinuaLeitura],
+		];
+
+		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
+
+		if (!proximo) {
+			return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
+		}
+
+		AutomatoLexico.indexGeral++;
+		return proximo(arquivo);
+	}
+
+	private static q6(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q6");
+
+		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q7],
-			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroProximoCaractere],
-			[[" "], AutomatoLexicoUtils.erroProximoCaractereVazio],
+			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroAteSimbolo],
+			[[" ", "\r", "\n"], AutomatoLexicoUtils.erroContinuaLeitura],
 		];
 
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
+		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
 
 		if (!proximo) {
-			AutomatoLexicoUtils.erroProximoCaractere(linha, index);
-			return;
+			return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
 		}
 
-		index++;
-		proximo!(linha, index);
+		AutomatoLexico.indexGeral++;
+		return proximo(arquivo);
 	}
 
-	private static q7(linha: string, index: number) {
-		console.log("q7", AutomatoLexico.indexInicial, index, linha[index]);
-		const opcoes: OpcoesType[] = [
+	private static q7(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q7");
+
+		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q7],
 			[["E", "e"], AutomatoLexico.q8],
-			[[...Simbolos, " "], TokenUtils.novoTokenInteiro],
-			[Letras, AutomatoLexicoUtils.erroProximoCaractere],
+			[[...Simbolos, " ", "\r", "\n"], TokenUtils.novoTokenReal],
+			[Letras, AutomatoLexicoUtils.erroAteSimbolo],
 		];
 
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
-
-		if (!linha[index]) {
-			const token: Token = {
-				classe: TokenClasse.Num,
-				lexema: linha.substring(AutomatoLexico.indexInicial, index),
-				tipo: TokenTipo.Real,
-			};
-			AutomatoLexico.tokens.push(token);
-			return;
-		}
+		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
 
 		if (!proximo) {
-			AutomatoLexicoUtils.erroProximoCaractere(linha, index);
-			return;
-		}
-
-		index++;
-		proximo!(linha, index);
-	}
-
-	private static q8(linha: string, index: number) {
-		console.log("q8", AutomatoLexico.indexInicial, index, linha[index]);
-		const opcoes: OpcoesType[] = [
-			[Digitos, AutomatoLexico.q9],
-			[["+", "-"], AutomatoLexico.q25],
-			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroProximoCaractere],
-			[[" "], AutomatoLexicoUtils.erroProximoCaractereVazio],
-		];
-
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
-
-		if (!proximo) {
-			AutomatoLexicoUtils.erroProximoCaractere(linha, index);
-			return;
-		}
-
-		index++;
-		proximo!(linha, index);
-	}
-
-	private static q9(linha: string, index: number) {
-		console.log("q9", AutomatoLexico.indexInicial, index, linha[index]);
-		const opcoes: OpcoesType[] = [
-			[Digitos, AutomatoLexico.q9],
-			[[...Simbolos, " "], TokenUtils.novoTokenReal],
-			[Letras, AutomatoLexicoUtils.erroProximoCaractere],
-		];
-
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
-
-		if (!linha[index]) {
 			const token: Token = {
 				classe: TokenClasse.Num,
-				lexema: linha.substring(AutomatoLexico.indexInicial, index),
+				lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 				tipo: TokenTipo.Real,
 			};
-			AutomatoLexico.tokens.push(token);
-
-			return;
+			return token;
 		}
 
-		index++;
-		proximo!(linha, index);
+		proximo === TokenUtils.novoTokenReal ? null : AutomatoLexico.indexGeral++;
+		return proximo(arquivo);
 	}
 
-	private static q11(linha: string, index: number) {
-		console.log("q11", AutomatoLexico.indexInicial, index, linha[index]);
-		const opcoes: OpcoesType[] = [
+	private static q8(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q8");
+
+		const transicoes: TransicoesType[] = [
+			[Digitos, AutomatoLexico.q10],
+			[["+", "-"], AutomatoLexico.q9],
+			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroAteSimbolo],
+			[[" ", "\r", "\n"], AutomatoLexicoUtils.erroContinuaLeitura],
+		];
+
+		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
+
+		if (!proximo) {
+			return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
+		}
+
+		AutomatoLexico.indexGeral++;
+		return proximo(arquivo);
+	}
+
+	private static q9(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q9");
+
+		const transicoes: TransicoesType[] = [
+			[Digitos, AutomatoLexico.q9],
+			[[...Simbolos, " ", "\r", "\n"], TokenUtils.novoTokenReal],
+			[[...Letras], AutomatoLexicoUtils.erroAteSimbolo],
+		];
+
+		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
+
+		if (!proximo) {
+			if (arquivo[AutomatoLexico.indexGeral]) {
+				AutomatoLexico.indexGeral++;
+				return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
+			}
+			return TokenUtils.novoTokenReal(arquivo);
+		}
+
+		proximo === TokenUtils.novoTokenReal ? null : AutomatoLexico.indexGeral++;
+		return proximo(arquivo);
+	}
+
+	private static q10(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q10");
+
+		const transicoes: TransicoesType[] = [
+			[Digitos, AutomatoLexico.q10],
+			[[...Simbolos, " ", "\r", "\n"], TokenUtils.novoTokenReal],
+			[Letras, AutomatoLexicoUtils.erroAteSimbolo],
+		];
+
+		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
+
+		if (!proximo) {
+			if (arquivo[AutomatoLexico.indexGeral]) {
+				AutomatoLexico.indexGeral++;
+				return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
+			}
+			return TokenUtils.novoTokenReal(arquivo);
+		}
+
+		proximo === TokenUtils.novoTokenReal ? null : AutomatoLexico.indexGeral++;
+		return proximo(arquivo);
+	}
+
+	private static q11(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q11");
+
+		const transicoes: TransicoesType[] = [
 			[['"'], AutomatoLexico.q12],
-			[[...Digitos, ...Letras, ...Simbolos, " "], AutomatoLexico.q11],
+			[[...Digitos, ...Letras, ...Simbolos, " ", "\r", "\n"], AutomatoLexico.q11],
 		];
 
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
-
-		index++;
+		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
 
 		if (!proximo) {
-			AutomatoLexicoUtils.erroProximoCaractere(linha, index);
-			return;
+			return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
 		}
 
-		proximo!(linha, index);
+		AutomatoLexico.indexGeral++;
+		return proximo(arquivo);
 	}
 
-	private static q12(linha: string, index: number) {
-		console.log("q12", AutomatoLexico.indexInicial, index, linha[index]);
+	private static q12(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q12");
 
 		const token: Token = {
 			classe: TokenClasse.Lit,
-			lexema: linha.substring(AutomatoLexico.indexInicial, index + 1),
+			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Literal,
 		};
 
-		AutomatoLexico.tokens.push(token);
+		token.lexema = TokenUtils.formatarToken(token);
 
-		if (!linha[index]) {
-			return;
-		}
-
-		AutomatoLexico.q0(linha, index);
+		return token;
 	}
 
-	private static q13(linha: string, index: number) {
-		console.log("q13", AutomatoLexico.indexInicial, index, linha[index]);
+	private static q13(arquivo: string): Token | void {
+		AutomatoLexicoUtils.log(arquivo, "q13");
 
-		const opcoes: OpcoesType[] = [
-			[[...Simbolos, " "], TokenUtils.novoTokenid],
-			[[...Digitos, ...Letras], AutomatoLexico.q13],
+		const transicoes: TransicoesType[] = [
+			[[...Digitos, ...Letras, "_"], AutomatoLexico.q13],
+			[[...Simbolos, " ", "\n", "\r"], TokenUtils.novoTokenId],
 		];
 
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
-
-		if (!linha[index]) {
-			const token: Token = TokenUtils.inserirToken(
-				linha.substring(AutomatoLexico.indexInicial, index)
-			);
-			if (token.lexema === "fim") {
-				token.classe = TokenClasse.EOF;
-				token.tipo = "EOF";
-			}
-			AutomatoLexico.tokens.push(token);
-			if (TokenUtils.eReservada(token.classe)) {
-				TabelaDeSimbolos.push(token);
-			}
-			return;
-		}
+		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
 
 		if (!proximo) {
-			AutomatoLexicoUtils.erroProximoCaractere(linha, index);
-			return;
+			if (arquivo[AutomatoLexico.indexGeral]) {
+				AutomatoLexico.indexGeral++;
+				return AutomatoLexicoUtils.erroContinuaLeitura(arquivo);
+			}
+			return TokenUtils.novoTokenId(arquivo);
 		}
 
-		index++;
-		proximo!(linha, index);
+		AutomatoLexico.indexGeral++;
+		return proximo(arquivo);
 	}
 
-	private static q14(linha: string, index: number) {
-		console.log("q14", AutomatoLexico.indexInicial, index, linha[index]);
-		const opcoes: OpcoesType[] = [
+	private static q14(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q14");
+
+		const transicoes: TransicoesType[] = [
 			[["}"], AutomatoLexico.q15],
-			[[...Digitos, ...Letras, ...Simbolos], AutomatoLexico.q14],
+			[[...Digitos, ...Letras, ...Simbolos, " ", "\r", "\n"], AutomatoLexico.q14],
 		];
 
-		index++;
-
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
+		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
 
 		if (!proximo) {
-			AutomatoLexicoUtils.erroProximoCaractere(linha, index);
-			return;
+			return AutomatoLexicoUtils.erroAteSimbolo(arquivo);
 		}
 
-		proximo!(linha, index);
+		AutomatoLexico.indexGeral++;
+		return proximo(arquivo);
 	}
 
-	private static q15(linha: string, index: number) {
-		console.log("q15", AutomatoLexico.indexInicial, index, linha[index]);
+	private static q15(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q15");
+
 		const token: Token = {
 			classe: TokenClasse.Comentario,
-			lexema: linha.substring(AutomatoLexico.indexInicial, index + 1),
+			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Nulo,
 		};
 
-		AutomatoLexico.tokens.push(token);
-		if (!linha[index]) {
-			return;
-		}
+		token.lexema = TokenUtils.formatarToken(token);
 
-		index++;
-		AutomatoLexico.q0(linha, index);
+		return token;
 	}
 
-	private static q16(linha: string, index: number) {
-		console.log("q16", AutomatoLexico.indexInicial, index, linha[index]);
-
-		const opcoes: OpcoesType[] = [
+	private static q16(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q16");
+		const transicoes: TransicoesType[] = [
 			[["-"], AutomatoLexico.q17],
 			[[">", "="], AutomatoLexico.q19],
-			[[" ", ...Letras, ...Digitos, ...Simbolos], AutomatoLexico.q0],
+			[[" ", "\r", "\n", ...Letras, ...Digitos, ...Simbolos], AutomatoLexicoUtils.ignorar],
 		];
+		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
 
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
-
-		if (proximo == AutomatoLexico.q0 || !linha[index]) {
+		if (proximo == AutomatoLexicoUtils.ignorar || !proximo) {
 			const token: Token = {
 				classe: TokenClasse.OPR,
-				lexema: linha.substring(AutomatoLexico.indexInicial, index),
+				lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 				tipo: TokenTipo.Nulo,
 			};
-			AutomatoLexico.tokens.push(token);
 
-			if (!linha[index]) {
-				return;
-			}
-
-			AutomatoLexico.q0(linha, index);
-			return;
+			return token;
 		}
 
-		if (!proximo) {
-			AutomatoLexicoUtils.erroProximoCaractere(linha, index);
-			return;
-		}
-
-		index = linha === " " ? index : index + 1;
-		proximo!(linha, index);
+		AutomatoLexico.indexGeral =
+			arquivo === " " ? AutomatoLexico.indexGeral : AutomatoLexico.indexGeral + 1;
+		return proximo(arquivo);
 	}
 
-	private static q17(linha: string, index: number) {
-		console.log("q17", AutomatoLexico.indexInicial, index, linha[index]);
-		const opcoes: OpcoesType[] = [
-			[[...Letras, ...Digitos, ...Simbolos, " "], TokenUtils.novoTokenAtribuicao],
-		];
+	private static q17(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q17");
 
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
+		const token: Token = {
+			classe: TokenClasse.RCB,
+			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
+			tipo: TokenTipo.Nulo,
+		};
 
-		if (!linha[index]) {
-			const token: Token = {
-				classe: TokenClasse.RCB,
-				lexema: linha.substring(AutomatoLexico.indexInicial, index),
-				tipo: TokenTipo.Nulo,
-			};
-			AutomatoLexico.tokens.push(token);
+		token.lexema = TokenUtils.formatarToken(token);
 
-			return;
-		}
-
-		index++;
-		proximo!(linha, index);
+		return token;
 	}
 
-	private static q18(linha: string, index: number) {
-		const opcoes: OpcoesType[] = [
-			[["="], AutomatoLexico.q19],
-			[[" ", ...Letras, ...Digitos, ...Simbolos], AutomatoLexico.q0],
+	private static q18(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q18");
+		const transicoes: TransicoesType[] = [
+			[[">", "="], AutomatoLexico.q19],
+			[[" ", "\r", "\n", ...Letras, ...Digitos, ...Simbolos], AutomatoLexicoUtils.ignorar],
 		];
+		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
 
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
-
-		if (proximo == AutomatoLexico.q0 || !linha[index]) {
+		if (proximo == AutomatoLexicoUtils.ignorar || !proximo) {
 			const token: Token = {
 				classe: TokenClasse.OPR,
-				lexema: linha.substring(AutomatoLexico.indexInicial, index),
+				lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 				tipo: TokenTipo.Nulo,
 			};
-			AutomatoLexico.tokens.push(token);
-			AutomatoLexico.q0(linha, index);
-			return;
+
+			return token;
 		}
 
-		index++;
-		proximo!(linha, index);
+		proximo === AutomatoLexicoUtils.ignorar ? null : AutomatoLexico.indexGeral++;
+		return proximo(arquivo);
 	}
 
-	private static q19(linha: string, index: number) {
-		console.log("q19", AutomatoLexico.indexInicial, index, linha[index]);
+	private static q19(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q19");
 
 		const token: Token = {
 			classe: TokenClasse.OPR,
-			lexema: linha.substring(AutomatoLexico.indexInicial, index),
+			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Nulo,
 		};
-		AutomatoLexico.tokens.push(token);
-		if (!linha[index]) {
-			return;
-		}
-		AutomatoLexico.q0(linha, index);
+
+		token.lexema = TokenUtils.formatarToken(token);
+
+		return token;
 	}
 
-	private static q20(linha: string, index: number) {
-		console.log("q20", AutomatoLexico.indexInicial, index, linha[index]);
+	private static q20(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q20");
+
 		const token: Token = {
 			classe: TokenClasse.OPM,
-			lexema: linha.substring(AutomatoLexico.indexInicial, index),
+			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Nulo,
 		};
-		AutomatoLexico.tokens.push(token);
-		if (!linha[index]) {
-			return;
-		}
-		AutomatoLexico.q0(linha, index);
+
+		return token;
 	}
 
-	private static q21(linha: string, index: number) {
-		console.log("q21", AutomatoLexico.indexInicial, index, linha[index]);
+	private static q21(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q21");
+
 		const token: Token = {
 			classe: TokenClasse.AB_P,
-			lexema: linha.substring(AutomatoLexico.indexInicial, index),
+			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Nulo,
 		};
-		AutomatoLexico.tokens.push(token);
-		if (!linha[index]) {
-			return;
-		}
-		AutomatoLexico.q0(linha, index);
+
+		return token;
 	}
 
-	private static q22(linha: string, index: number) {
-		console.log("q22", AutomatoLexico.indexInicial, index, linha[index]);
+	private static q22(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q22");
+
 		const token: Token = {
 			classe: TokenClasse.FC_P,
-			lexema: linha.substring(AutomatoLexico.indexInicial, index),
+			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Nulo,
 		};
-		AutomatoLexico.tokens.push(token);
-		if (!linha[index]) {
-			return;
-		}
-		AutomatoLexico.q0(linha, index);
+
+		return token;
 	}
 
-	private static q23(linha: string, index: number) {
-		console.log("q23", AutomatoLexico.indexInicial, index, linha[index]);
+	private static q23(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q23");
+
 		const token: Token = {
 			classe: TokenClasse.PT_V,
-			lexema: linha.substring(AutomatoLexico.indexInicial, index),
+			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Nulo,
 		};
-		AutomatoLexico.tokens.push(token);
-		if (!linha[index]) {
-			return;
-		}
-		AutomatoLexico.q0(linha, index);
+
+		return token;
 	}
 
-	private static q24(linha: string, index: number) {
-		console.log("q24", AutomatoLexico.indexInicial, index, linha[index]);
+	private static q24(arquivo: string) {
+		AutomatoLexicoUtils.log(arquivo, "q24");
+
 		const token: Token = {
 			classe: TokenClasse.Vir,
-			lexema: linha.substring(AutomatoLexico.indexInicial, index),
+			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Nulo,
 		};
-		AutomatoLexico.tokens.push(token);
-		if (!linha[index]) {
-			return;
-		}
-		AutomatoLexico.q0(linha, index);
-	}
 
-	private static q25(linha: string, index: number) {
-		console.log("q25", AutomatoLexico.indexInicial, index, linha[index]);
-		const opcoes: OpcoesType[] = [
-			[Digitos, AutomatoLexico.q9],
-			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroProximoCaractere],
-			[[" "], AutomatoLexicoUtils.erroProximoCaractereVazio],
-		];
-
-		const proximo = AutomatoLexicoUtils.proximoEstado(opcoes, linha[index]);
-
-		if (!proximo) {
-			AutomatoLexicoUtils.erroProximoCaractere(linha, index);
-			return;
-		}
-
-		index++;
-		proximo!(linha, index);
+		return token;
 	}
 }

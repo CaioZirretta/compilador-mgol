@@ -4,12 +4,12 @@ import { TabelaDeSimbolos } from "./model/TabelaDeSimbolos";
 import { Token, TokenLista } from "./model/Token";
 
 export class AnalisadorLexico {
-	static scanner(linha: string, index: number): Token[] {
-		const tokens = AutomatoLexico.iniciar(linha, index);
+	static scanner(arquivo: string): Token | void {
+		const token: Token | void = AutomatoLexico.iniciar(arquivo);
 
-		tokens.forEach((token) => {
+		if(token){
 			TokenLista.push(token);
-
+	
 			switch (token.classe) {
 				case "ERRO":
 					ErrosLista.push(token);
@@ -20,8 +20,8 @@ export class AnalisadorLexico {
 				default:
 					break;
 			}
-		});
+		}
 
-		return tokens;
+		return token;
 	}
 }
