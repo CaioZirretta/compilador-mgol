@@ -14,14 +14,24 @@ export class AutomatoLexicoUtils {
 		}
 	}
 
-	static quebraDeLinha() {
-		AutomatoLexico.linha++;
-		AutomatoLexico.coluna = 1;
+	static quebraDeLinha(arquivo: string) {
+		if (arquivo[AutomatoLexico.indexGeral] === "\n") {
+			AutomatoLexico.linha++;
+			AutomatoLexico.coluna = 1;
+		} else if(arquivo[AutomatoLexico.indexGeral] !== "\r"){
+			console.log("coluna++")
+			AutomatoLexico.coluna++;
+		}
 	}
 
-	static atualizaPosicao() {
-		AutomatoLexico.coluna = AutomatoLexico.indexGeral - AutomatoLexico.indexAuxiliar;
+	static aumentarIndex(){
+		AutomatoLexico.indexGeral++
+		AutomatoLexico.coluna++;
 	}
+
+	// static atualizaColuna() {
+	// 	AutomatoLexico.coluna = AutomatoLexico.indexGeral - AutomatoLexico.indexAuxiliar;
+	// }
 
 	static log(arquivo: string, estado: string) {
 		let char;
@@ -66,22 +76,23 @@ export class AutomatoLexicoUtils {
 	}
 
 	static erroContinuaLeitura(arquivo: string) {
-		AutomatoLexicoUtils.atualizaPosicao();
-
 		const erro: Token = {
 			classe: TokenClasse.ERRO,
-			lexema: `Erro léxico: caractere inválido na linha ${AutomatoLexico.linha} e coluna ${AutomatoLexico.coluna}`,
+			lexema: `Erro léxico: caractere inválido na linha ${AutomatoLexico.linha} e coluna ${
+				AutomatoLexico.coluna - 1
+			}`,
 			tipo: TokenTipo.Nulo,
 		};
+
 		return erro;
 	}
 
 	static erroAteSimbolo(arquivo: string) {
-		AutomatoLexicoUtils.atualizaPosicao();
-
 		const erro: Token = {
 			classe: TokenClasse.ERRO,
-			lexema: `Erro léxico: caractere inválido na linha ${AutomatoLexico.linha} e coluna ${AutomatoLexico.coluna}`,
+			lexema: `Erro léxico: caractere inválido na linha ${AutomatoLexico.linha} e coluna ${
+				AutomatoLexico.coluna - 1
+			}`,
 			tipo: TokenTipo.Nulo,
 		};
 
@@ -94,6 +105,7 @@ export class AutomatoLexicoUtils {
 				return erro;
 			}
 		}
+
 		return erro;
 	}
 }

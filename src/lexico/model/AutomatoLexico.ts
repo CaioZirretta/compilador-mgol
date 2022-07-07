@@ -9,6 +9,7 @@ export class AutomatoLexico {
 	static indexAuxiliar: number = 0;
 	static indexGeral: number = 0;
 
+	static colunaInicial: number = 1;
 	static coluna: number = 1;
 	static linha: number = 1;
 
@@ -19,6 +20,7 @@ export class AutomatoLexico {
 
 	static q0(arquivo: string): Token | void {
 		AutomatoLexicoUtils.log(arquivo, "q0");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		AutomatoLexico.indexAuxiliar = AutomatoLexico.indexGeral;
 
@@ -54,6 +56,7 @@ export class AutomatoLexico {
 
 	private static q1(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q1");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q1],
@@ -79,6 +82,7 @@ export class AutomatoLexico {
 
 	private static q2(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q2");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q4],
@@ -100,6 +104,7 @@ export class AutomatoLexico {
 
 	private static q3(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q3");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q4],
@@ -119,6 +124,7 @@ export class AutomatoLexico {
 
 	private static q4(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q4");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q4],
@@ -142,6 +148,7 @@ export class AutomatoLexico {
 
 	private static q5(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q5");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q10],
@@ -161,6 +168,7 @@ export class AutomatoLexico {
 
 	private static q6(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q6");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q7],
@@ -180,6 +188,7 @@ export class AutomatoLexico {
 
 	private static q7(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q7");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q7],
@@ -205,6 +214,7 @@ export class AutomatoLexico {
 
 	private static q8(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q8");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q10],
@@ -225,6 +235,7 @@ export class AutomatoLexico {
 
 	private static q9(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q9");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q9],
@@ -248,6 +259,7 @@ export class AutomatoLexico {
 
 	private static q10(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q10");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q10],
@@ -271,6 +283,7 @@ export class AutomatoLexico {
 
 	private static q11(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q11");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
 			[['"'], AutomatoLexico.q12],
@@ -289,6 +302,7 @@ export class AutomatoLexico {
 
 	private static q12(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q12");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
 			classe: TokenClasse.Lit,
@@ -303,6 +317,7 @@ export class AutomatoLexico {
 
 	private static q13(arquivo: string): Token | void {
 		AutomatoLexicoUtils.log(arquivo, "q13");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
 			[[...Digitos, ...Letras, "_"], AutomatoLexico.q13],
@@ -325,6 +340,7 @@ export class AutomatoLexico {
 
 	private static q14(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q14");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
 			[["}"], AutomatoLexico.q15],
@@ -343,6 +359,7 @@ export class AutomatoLexico {
 
 	private static q15(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q15");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
 			classe: TokenClasse.Comentario,
@@ -357,6 +374,8 @@ export class AutomatoLexico {
 
 	private static q16(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q16");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
+
 		const transicoes: TransicoesType[] = [
 			[["-"], AutomatoLexico.q17],
 			[[">", "="], AutomatoLexico.q19],
@@ -381,6 +400,7 @@ export class AutomatoLexico {
 
 	private static q17(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q17");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
 			classe: TokenClasse.RCB,
@@ -395,6 +415,8 @@ export class AutomatoLexico {
 
 	private static q18(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q18");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
+
 		const transicoes: TransicoesType[] = [
 			[[">", "="], AutomatoLexico.q19],
 			[[" ", "\r", "\n", ...Letras, ...Digitos, ...Simbolos], AutomatoLexicoUtils.ignorar],
@@ -417,6 +439,7 @@ export class AutomatoLexico {
 
 	private static q19(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q19");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
 			classe: TokenClasse.OPR,
@@ -431,6 +454,7 @@ export class AutomatoLexico {
 
 	private static q20(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q20");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
 			classe: TokenClasse.OPM,
@@ -443,6 +467,7 @@ export class AutomatoLexico {
 
 	private static q21(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q21");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
 			classe: TokenClasse.AB_P,
@@ -455,6 +480,7 @@ export class AutomatoLexico {
 
 	private static q22(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q22");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
 			classe: TokenClasse.FC_P,
@@ -467,6 +493,7 @@ export class AutomatoLexico {
 
 	private static q23(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q23");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
 			classe: TokenClasse.PT_V,
@@ -479,6 +506,7 @@ export class AutomatoLexico {
 
 	private static q24(arquivo: string) {
 		AutomatoLexicoUtils.log(arquivo, "q24");
+		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
 			classe: TokenClasse.Vir,

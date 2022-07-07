@@ -7,9 +7,9 @@ export class AnalisadorLexico {
 	static scanner(arquivo: string): Token | void {
 		const token: Token | void = AutomatoLexico.iniciar(arquivo);
 
-		if(token){
+		if (token) {
 			TokenLista.push(token);
-	
+
 			switch (token.classe) {
 				case "ERRO":
 					ErrosLista.push(token);

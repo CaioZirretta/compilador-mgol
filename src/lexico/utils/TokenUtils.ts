@@ -29,9 +29,9 @@ export class TokenUtils {
 
 		token.lexema = TokenUtils.formatarToken(token);
 
-		if (arquivo[AutomatoLexico.indexGeral] === "\n") {
-			AutomatoLexicoUtils.quebraDeLinha();
-		}
+		// if (arquivo[AutomatoLexico.indexGeral] === "\n") {
+		// 	AutomatoLexicoUtils.quebraDeLinha();
+		// }
 
 		AutomatoLexico.indexGeral += ajuste;
 
@@ -45,9 +45,9 @@ export class TokenUtils {
 			tipo: TokenTipo.Inteiro,
 		};
 
-		if (arquivo[AutomatoLexico.indexGeral] === "\n") {
-			AutomatoLexicoUtils.quebraDeLinha();
-		}
+		// if (arquivo[AutomatoLexico.indexGeral] === "\n") {
+		// 	AutomatoLexicoUtils.quebraDeLinha();
+		// }
 
 		token.lexema = TokenUtils.formatarToken(token);
 
@@ -61,9 +61,9 @@ export class TokenUtils {
 			tipo: TokenTipo.Real,
 		};
 
-		if (arquivo[AutomatoLexico.indexGeral] === "\n") {
-			AutomatoLexicoUtils.quebraDeLinha();
-		}
+		// if (arquivo[AutomatoLexico.indexGeral] === "\n") {
+		// 	AutomatoLexicoUtils.quebraDeLinha();
+		// }
 
 		token.lexema = TokenUtils.formatarToken(token);
 
@@ -77,9 +77,9 @@ export class TokenUtils {
 
 		AutomatoLexico.indexGeral++;
 
-		if (arquivo[AutomatoLexico.indexGeral] === "\n") {
-			AutomatoLexicoUtils.quebraDeLinha();
-		}
+		// if (arquivo[AutomatoLexico.indexGeral] === "\n") {
+		// 	AutomatoLexicoUtils.quebraDeLinha();
+		// }
 
 		return token;
 	}
