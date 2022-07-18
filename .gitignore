@@ -130,3 +130,6 @@ src/test.spec.ts
 # IntelliJ
 .DS_Store
 .idea
+
+# VSCode
+.vscode
