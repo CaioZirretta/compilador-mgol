@@ -8,7 +8,7 @@ export const enum TokenClasse {
 	Num = "Num",
 	Lit = "Lit",
 	id = "id",
-	Comentario = "Comentario",
+	comentario = "comentario",
 	EOF = "EOF",
 	OPR = "OPR",
 	RCB = "RCB",

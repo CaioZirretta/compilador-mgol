@@ -1,6 +1,6 @@
 import { AutomatoLexico } from "./model/AutomatoLexico";
 import { ErrosLista } from "./model/ErrosLexicos";
-import { TabelaDeSimbolos } from "./model/TabelaDeSimbolos";
+import { TabelaDeSimbolos, tabelaDeSimbolosLexemas } from "./model/TabelaDeSimbolos";
 import { Token, TokenLista } from "./model/Token";
 
 export class AnalisadorLexico {
@@ -15,8 +15,12 @@ export class AnalisadorLexico {
 					ErrosLista.push(token);
 					break;
 				case "id":
-					TabelaDeSimbolos.push(token);
+					if (!tabelaDeSimbolosLexemas().includes(token.lexema)) {
+						TabelaDeSimbolos.push(token);
+					}
 					break;
+				case "comentario":
+					return;
 				default:
 					break;
 			}

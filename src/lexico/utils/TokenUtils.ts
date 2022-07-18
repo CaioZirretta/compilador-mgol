@@ -1,6 +1,5 @@
 import { Simbolos } from "./../dicionario/Simbolos";
 import { arquivoFonte } from "./../../app";
-import { AutomatoLexicoUtils } from "./AutomatoLexicoUtils";
 import { Reservadas } from "../dicionario/Simbolos";
 import { AutomatoLexico } from "../model/AutomatoLexico";
 import { TabelaDeSimbolos } from "../model/TabelaDeSimbolos";
@@ -25,13 +24,9 @@ export class TokenUtils {
 
 		let palavra = arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral + ajuste);
 
-		const token: Token = TokenUtils.inserirToken(palavra);
+		const token: Token = TokenUtils.gerarTokenId(palavra);
 
-		token.lexema = TokenUtils.formatarToken(token);
-
-		// if (arquivo[AutomatoLexico.indexGeral] === "\n") {
-		// 	AutomatoLexicoUtils.quebraDeLinha();
-		// }
+		token.lexema = TokenUtils.formatarPalavra(token.lexema);
 
 		AutomatoLexico.indexGeral += ajuste;
 
@@ -45,11 +40,7 @@ export class TokenUtils {
 			tipo: TokenTipo.Inteiro,
 		};
 
-		// if (arquivo[AutomatoLexico.indexGeral] === "\n") {
-		// 	AutomatoLexicoUtils.quebraDeLinha();
-		// }
-
-		token.lexema = TokenUtils.formatarToken(token);
+		token.lexema = TokenUtils.formatarPalavra(token.lexema);
 
 		return token;
 	}
@@ -61,11 +52,7 @@ export class TokenUtils {
 			tipo: TokenTipo.Real,
 		};
 
-		// if (arquivo[AutomatoLexico.indexGeral] === "\n") {
-		// 	AutomatoLexicoUtils.quebraDeLinha();
-		// }
-
-		token.lexema = TokenUtils.formatarToken(token);
+		token.lexema = TokenUtils.formatarPalavra(token.lexema);
 
 		return token;
 	}
@@ -73,32 +60,30 @@ export class TokenUtils {
 	static quebraDeLinhaId(arquivo: string) {
 		let palavra = arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral);
 
-		const token: Token = TokenUtils.inserirToken(palavra);
+		const token: Token = TokenUtils.gerarTokenId(palavra);
 
 		AutomatoLexico.indexGeral++;
-
-		// if (arquivo[AutomatoLexico.indexGeral] === "\n") {
-		// 	AutomatoLexicoUtils.quebraDeLinha();
-		// }
 
 		return token;
 	}
 
-	static formatarToken(token: Token) {
-		let lexema = token.lexema;
+	private static gerarTokenId(palavra: string) {
+		let token: Token;
 
-		lexema = lexema.replaceAll("\n", "");
-		lexema = lexema.replaceAll("\r", "");
+		palavra = TokenUtils.formatarPalavra(palavra);
 
-		return lexema;
-	}
+		if (TokenUtils.eReservada(palavra)) {
+			token = TokenUtils.tokenReservado(palavra);
+			return token;
+		}
 
-	static eReservada(palavra: string) {
-		return Reservadas.includes(palavra);
+		token = { classe: TokenClasse.id, lexema: palavra, tipo: TokenTipo.Nulo };
+
+		return token;
 	}
 
 	private static tokenReservado(palavra: string): Token {
-		let novoToken: Token;
+		let novoToken: Token = { classe: TokenClasse.ERRO, lexema: "EMPTY", tipo: "EMPTY" };
 
 		TabelaDeSimbolos.some((token) => {
 			if (token.lexema === palavra) {
@@ -110,13 +95,15 @@ export class TokenUtils {
 		return novoToken!;
 	}
 
-	private static inserirToken(palavra: string) {
-		let token: Token;
-		if (TokenUtils.eReservada(palavra)) {
-			token = TokenUtils.tokenReservado(palavra);
-			return token;
-		}
-		token = { classe: TokenClasse.id, lexema: palavra, tipo: TokenTipo.Nulo };
-		return token;
+	private static eReservada(palavra: string) {
+		return Reservadas.includes(palavra);
+	}
+
+	static formatarPalavra(palavra: string) {
+		palavra = palavra.trim();
+		palavra = palavra.replaceAll("\n", "");
+		palavra = palavra.replaceAll("\r", "");
+		palavra = palavra.replaceAll("\t", "");
+		return palavra;
 	}
 }

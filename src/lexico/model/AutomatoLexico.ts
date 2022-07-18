@@ -13,12 +13,12 @@ export class AutomatoLexico {
 	static linha: number = 1;
 
 	static iniciar(arquivo: string): Token | void {
-		console.log("\n============ Automato iniciando =============");
+		// console.log("\n============ Automato iniciando =============");
 		return this.q0(arquivo);
 	}
 
 	static q0(arquivo: string): Token | void {
-		AutomatoLexicoUtils.log(arquivo, "q0");
+		// AutomatoLexicoUtils.log(arquivo, "q0");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		AutomatoLexico.indexAuxiliar = AutomatoLexico.indexGeral;
@@ -54,7 +54,7 @@ export class AutomatoLexico {
 	}
 
 	private static q1(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q1");
+		// AutomatoLexicoUtils.log(arquivo, "q1");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
@@ -80,7 +80,7 @@ export class AutomatoLexico {
 	}
 
 	private static q2(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q2");
+		// AutomatoLexicoUtils.log(arquivo, "q2");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
@@ -102,7 +102,7 @@ export class AutomatoLexico {
 	}
 
 	private static q3(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q3");
+		// AutomatoLexicoUtils.log(arquivo, "q3");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
@@ -122,7 +122,7 @@ export class AutomatoLexico {
 	}
 
 	private static q4(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q4");
+		// AutomatoLexicoUtils.log(arquivo, "q4");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
@@ -146,7 +146,7 @@ export class AutomatoLexico {
 	}
 
 	private static q5(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q5");
+		// AutomatoLexicoUtils.log(arquivo, "q5");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
@@ -166,7 +166,7 @@ export class AutomatoLexico {
 	}
 
 	private static q6(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q6");
+		// AutomatoLexicoUtils.log(arquivo, "q6");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
@@ -186,7 +186,7 @@ export class AutomatoLexico {
 	}
 
 	private static q7(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q7");
+		// AutomatoLexicoUtils.log(arquivo, "q7");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
@@ -212,7 +212,7 @@ export class AutomatoLexico {
 	}
 
 	private static q8(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q8");
+		// AutomatoLexicoUtils.log(arquivo, "q8");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
@@ -233,7 +233,7 @@ export class AutomatoLexico {
 	}
 
 	private static q9(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q9");
+		// AutomatoLexicoUtils.log(arquivo, "q9");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
@@ -257,7 +257,7 @@ export class AutomatoLexico {
 	}
 
 	private static q10(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q10");
+		// AutomatoLexicoUtils.log(arquivo, "q10");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
@@ -281,7 +281,7 @@ export class AutomatoLexico {
 	}
 
 	private static q11(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q11");
+		// AutomatoLexicoUtils.log(arquivo, "q11");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
@@ -300,7 +300,7 @@ export class AutomatoLexico {
 	}
 
 	private static q12(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q12");
+		// AutomatoLexicoUtils.log(arquivo, "q12");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
@@ -309,13 +309,13 @@ export class AutomatoLexico {
 			tipo: TokenTipo.Literal,
 		};
 
-		token.lexema = TokenUtils.formatarToken(token);
+		token.lexema = TokenUtils.formatarPalavra(token.lexema);
 
 		return token;
 	}
 
 	private static q13(arquivo: string): Token | void {
-		AutomatoLexicoUtils.log(arquivo, "q13");
+		// AutomatoLexicoUtils.log(arquivo, "q13");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
@@ -338,7 +338,7 @@ export class AutomatoLexico {
 	}
 
 	private static q14(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q14");
+		// AutomatoLexicoUtils.log(arquivo, "q14");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
@@ -357,22 +357,22 @@ export class AutomatoLexico {
 	}
 
 	private static q15(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q15");
+		// AutomatoLexicoUtils.log(arquivo, "q15");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
-			classe: TokenClasse.Comentario,
+			classe: TokenClasse.comentario,
 			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Nulo,
 		};
 
-		token.lexema = TokenUtils.formatarToken(token);
+		token.lexema = TokenUtils.formatarPalavra(token.lexema)
 
 		return token;
 	}
 
 	private static q16(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q16");
+		// AutomatoLexicoUtils.log(arquivo, "q16");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
@@ -398,7 +398,7 @@ export class AutomatoLexico {
 	}
 
 	private static q17(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q17");
+		// AutomatoLexicoUtils.log(arquivo, "q17");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
@@ -407,13 +407,13 @@ export class AutomatoLexico {
 			tipo: TokenTipo.Nulo,
 		};
 
-		token.lexema = TokenUtils.formatarToken(token);
+		token.lexema = TokenUtils.formatarPalavra(token.lexema)
 
 		return token;
 	}
 
 	private static q18(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q18");
+		// AutomatoLexicoUtils.log(arquivo, "q18");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const transicoes: TransicoesType[] = [
@@ -437,7 +437,7 @@ export class AutomatoLexico {
 	}
 
 	private static q19(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q19");
+		// AutomatoLexicoUtils.log(arquivo, "q19");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
@@ -446,13 +446,13 @@ export class AutomatoLexico {
 			tipo: TokenTipo.Nulo,
 		};
 
-		token.lexema = TokenUtils.formatarToken(token);
+		token.lexema = TokenUtils.formatarPalavra(token.lexema)
 
 		return token;
 	}
 
 	private static q20(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q20");
+		// AutomatoLexicoUtils.log(arquivo, "q20");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
@@ -465,7 +465,7 @@ export class AutomatoLexico {
 	}
 
 	private static q21(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q21");
+		// AutomatoLexicoUtils.log(arquivo, "q21");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
@@ -478,7 +478,7 @@ export class AutomatoLexico {
 	}
 
 	private static q22(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q22");
+		// AutomatoLexicoUtils.log(arquivo, "q22");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
@@ -491,7 +491,7 @@ export class AutomatoLexico {
 	}
 
 	private static q23(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q23");
+		// AutomatoLexicoUtils.log(arquivo, "q23");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
@@ -504,7 +504,7 @@ export class AutomatoLexico {
 	}
 
 	private static q24(arquivo: string) {
-		AutomatoLexicoUtils.log(arquivo, "q24");
+		// AutomatoLexicoUtils.log(arquivo, "q24");
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {

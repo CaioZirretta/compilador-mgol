@@ -58,31 +58,45 @@ export const Letras: string[] = [
 ];
 
 export const Simbolos: string[] = [
-	"\,",
-	"\;",
-	"\:",
-	"\!",
-	"\?",
+	",",
+	";",
+	":",
+	"!",
+	"?",
 	"\\",
-	"\*",
-	"\+",
-	"\-",
-	"\/",
-	"\(",
-	"\)",
-	"\{",
-	"\}",
-	"\[",
-	"\]",
-	"\<",
-	"\>",
-	"\=",
-	"\'",
-	'\"',
-	"\_",
+	"*",
+	"+",
+	"-",
+	"/",
+	"(",
+	")",
+	"{",
+	"}",
+	"[",
+	"]",
+	"<",
+	">",
+	"=",
+	"'",
+	'"',
+	"_",
 ];
 
-export const SimbolosDeEstado: string[] = [
-]
+export const SimbolosDeEstado: string[] = [];
 
-export const Reservadas: string[] = TabelaDeSimbolos.map((t) => t.lexema);
+export const Reservadas: string[] = [
+	"inicio",
+	"varinicio",
+	"varfim",
+	"escreva",
+	"leia",
+	"se",
+	"entao",
+	"fimse",
+	"repita",
+	"fimrepita",
+	"fim",
+	"inteiro",
+	"literal",
+	"real"
+];

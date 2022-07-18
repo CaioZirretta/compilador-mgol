@@ -10,9 +10,13 @@ export const TabelaDeSimbolos: Token[] = [
 	{ classe: TokenClasse.entao, lexema: "entao", tipo: "entao" },
 	{ classe: TokenClasse.fimse, lexema: "fimse", tipo: "fimse" },
 	{ classe: TokenClasse.repita, lexema: "repita", tipo: "repita" },
-	{ classe: TokenClasse.fimRepita, lexema: "fimRepita", tipo: "fimRepita" },
+	{ classe: TokenClasse.fimRepita, lexema: "fimrepita", tipo: "fimrepita" },
 	{ classe: TokenClasse.fim, lexema: "fim", tipo: "fim" },
 	{ classe: TokenClasse.inteiro, lexema: "inteiro", tipo: "inteiro" },
 	{ classe: TokenClasse.literal, lexema: "literal", tipo: "literal" },
 	{ classe: TokenClasse.real, lexema: "real", tipo: "real" },
 ];
+
+export function tabelaDeSimbolosLexemas() {
+	return TabelaDeSimbolos.map((t) => t.lexema);
+}

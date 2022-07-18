@@ -1,2 +1,5 @@
-var fim 2j escreva 2x
-ye!
+inicio
+varinicio
+entao
+fimse
+fimrepita
