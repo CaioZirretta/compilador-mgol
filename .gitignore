@@ -132,4 +132,4 @@ src/test.spec.ts
 .idea
 
 # VSCode
-/vscode
+vscode/
