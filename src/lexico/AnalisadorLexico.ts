@@ -11,7 +11,7 @@ export class AnalisadorLexico {
 			TokenLista.push(token);
 
 			switch (token.classe) {
-				case "ERRO":
+				case "erro":
 					ErrosLista.push(token);
 					break;
 				case "id":

@@ -1,5 +1,1 @@
-inicio
-varinicio
-entao
-fimse
-fimrepita
+escreva A
