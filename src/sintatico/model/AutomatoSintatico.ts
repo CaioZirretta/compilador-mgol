@@ -1,5 +1,5 @@
 export class AutomatoSintatico {
-	pilha: string[] = ["0"];
+	static pilha: string[] = ["0"];
 
 	q0() {}
 	q1() {}
@@ -77,4 +77,20 @@ export class AutomatoSintatico {
 	q73() {}
 	q74() {}
 	q75() {}
+
+	static criar() {
+		return new AutomatoSintatico();
+	}
+
+	static empilhar(elemento:string){
+		AutomatoSintatico.pilha.push(elemento);
+	}
+
+	static desempilhar(){
+		AutomatoSintatico.pilha.pop();
+	}
+
+	static topoDaPilha(){
+		return AutomatoSintatico.pilha[AutomatoSintatico.pilha.length - 1]
+	}
 }

@@ -1,5 +1,1 @@
-import { AutomatoLexico } from '../lexico/model/AutomatoLexico';
-
-console.log(AutomatoLexico.iniciar("10! 2"));
-
-
+console.log("repita ab_p EXP_R fc_p".split(" ").length)
