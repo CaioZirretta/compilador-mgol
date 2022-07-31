@@ -15,5 +15,4 @@ export const arquivoFonte: string = fs.readFileSync(__dirname + "/resources/test
 
 // main();
 
-console.log(
- (new AnalisadorSintatico).acao("0", "P"));
+console.log(new AnalisadorSintatico().parser());

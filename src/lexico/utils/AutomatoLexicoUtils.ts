@@ -62,13 +62,16 @@ export class AutomatoLexicoUtils {
 
 	static ignorar(arquivo: string) {
 		switch (arquivo[AutomatoLexico.indexGeral]) {
-			case "\n":
-				AutomatoLexico.indexGeral++;
-				return;
 			case " ":
 				AutomatoLexico.indexGeral++;
 				return;
+			case "\n":
+				AutomatoLexico.indexGeral++;
+				return;
 			case "\r":
+				AutomatoLexico.indexGeral++;
+				return;
+			case "\t":
 				AutomatoLexico.indexGeral++;
 				return;
 		}

@@ -1,1 +1,9 @@
-console.log("repita ab_p EXP_R fc_p".split(" ").length)
+const retorno = "CPR → COND".split("→")[1].split(" ")
+
+if(!retorno){
+	console.log("num ta ok");
+} else { 
+	console.log("taoquei");
+}
+
+console.log(retorno[1]);

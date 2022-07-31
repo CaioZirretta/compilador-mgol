@@ -28,7 +28,7 @@ export const enum TokenClasse {
 	entao = "entao",
 	fimse = "fimse",
 	repita = "repita",
-	fimRepita = "fimRepita",
+	fimrepita = "fimrepita",
 	fim = "fim",
 	inteiro = "inteiro",
 	literal = "literal",

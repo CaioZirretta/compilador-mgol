@@ -24,7 +24,7 @@ export class AutomatoLexico {
 		AutomatoLexico.indexAuxiliar = AutomatoLexico.indexGeral;
 
 		const transicoes: TransicoesType[] = [
-			[[" ", "\n", "\r"], AutomatoLexicoUtils.ignorar],
+			[[" ", "\n", "\r", "\t"], AutomatoLexicoUtils.ignorar],
 			[['"'], AutomatoLexico.q11],
 			[["{"], AutomatoLexico.q14],
 			[["<"], AutomatoLexico.q16],
@@ -59,7 +59,7 @@ export class AutomatoLexico {
 
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q1],
-			[[...Simbolos, " ", "\r", "\n"], TokenUtils.novoTokenInteiro],
+			[[...Simbolos, " ", "\r", "\n", "\t"], TokenUtils.novoTokenInteiro],
 			[["."], AutomatoLexico.q6],
 			[["E", "e"], AutomatoLexico.q2],
 			[Letras, AutomatoLexicoUtils.erroAteSimbolo],
@@ -88,7 +88,7 @@ export class AutomatoLexico {
 			[["+"], AutomatoLexico.q3],
 			[["-"], AutomatoLexico.q5],
 			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroAteSimbolo],
-			[[" ", "\r", "\n"], AutomatoLexicoUtils.erroContinuaLeitura],
+			[[" ", "\r", "\n", "\t"], AutomatoLexicoUtils.erroContinuaLeitura],
 		];
 
 		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
@@ -108,7 +108,7 @@ export class AutomatoLexico {
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q4],
 			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroAteSimbolo],
-			[[" ", "\r", "\n"], AutomatoLexicoUtils.erroContinuaLeitura],
+			[[" ", "\r", "\n", "\t"], AutomatoLexicoUtils.erroContinuaLeitura],
 		];
 
 		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
@@ -127,7 +127,7 @@ export class AutomatoLexico {
 
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q4],
-			[[...Simbolos, " ", "\r", "\n"], TokenUtils.novoTokenInteiro],
+			[[...Simbolos, " ", "\r", "\n", "\t"], TokenUtils.novoTokenInteiro],
 			[Letras, AutomatoLexicoUtils.erroAteSimbolo],
 		];
 
@@ -152,7 +152,7 @@ export class AutomatoLexico {
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q10],
 			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroAteSimbolo],
-			[[" ", "\r", "\n"], AutomatoLexicoUtils.erroContinuaLeitura],
+			[[" ", "\r", "\n", "\t"], AutomatoLexicoUtils.erroContinuaLeitura],
 		];
 
 		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
@@ -172,7 +172,7 @@ export class AutomatoLexico {
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q7],
 			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroAteSimbolo],
-			[[" ", "\r", "\n"], AutomatoLexicoUtils.erroContinuaLeitura],
+			[[" ", "\r", "\n", "\t"], AutomatoLexicoUtils.erroContinuaLeitura],
 		];
 
 		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
@@ -192,7 +192,7 @@ export class AutomatoLexico {
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q7],
 			[["E", "e"], AutomatoLexico.q8],
-			[[...Simbolos, " ", "\r", "\n"], TokenUtils.novoTokenReal],
+			[[...Simbolos, " ", "\r", "\n", "\t"], TokenUtils.novoTokenReal],
 			[Letras, AutomatoLexicoUtils.erroAteSimbolo],
 		];
 
@@ -219,7 +219,7 @@ export class AutomatoLexico {
 			[Digitos, AutomatoLexico.q10],
 			[["+", "-"], AutomatoLexico.q9],
 			[[...Simbolos, ...Letras], AutomatoLexicoUtils.erroAteSimbolo],
-			[[" ", "\r", "\n"], AutomatoLexicoUtils.erroContinuaLeitura],
+			[[" ", "\r", "\n", "\t"], AutomatoLexicoUtils.erroContinuaLeitura],
 		];
 
 		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
@@ -238,7 +238,7 @@ export class AutomatoLexico {
 
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q9],
-			[[...Simbolos, " ", "\r", "\n"], TokenUtils.novoTokenReal],
+			[[...Simbolos, " ", "\r", "\n", "\t"], TokenUtils.novoTokenReal],
 			[[...Letras], AutomatoLexicoUtils.erroAteSimbolo],
 		];
 
@@ -262,7 +262,7 @@ export class AutomatoLexico {
 
 		const transicoes: TransicoesType[] = [
 			[Digitos, AutomatoLexico.q10],
-			[[...Simbolos, " ", "\r", "\n"], TokenUtils.novoTokenReal],
+			[[...Simbolos, " ", "\r", "\n", "\t"], TokenUtils.novoTokenReal],
 			[Letras, AutomatoLexicoUtils.erroAteSimbolo],
 		];
 
@@ -286,7 +286,7 @@ export class AutomatoLexico {
 
 		const transicoes: TransicoesType[] = [
 			[['"'], AutomatoLexico.q12],
-			[[...Digitos, ...Letras, ...Simbolos, " ", "\r", "\n"], AutomatoLexico.q11],
+			[[...Digitos, ...Letras, ...Simbolos, " ", "\r", "\n", "\t"], AutomatoLexico.q11],
 		];
 
 		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
@@ -320,7 +320,7 @@ export class AutomatoLexico {
 
 		const transicoes: TransicoesType[] = [
 			[[...Digitos, ...Letras, "_"], AutomatoLexico.q13],
-			[[...Simbolos, " ", "\n", "\r"], TokenUtils.novoTokenId],
+			[[...Simbolos, " ", "\n", "\r", "\t"], TokenUtils.novoTokenId],
 		];
 
 		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
@@ -343,7 +343,7 @@ export class AutomatoLexico {
 
 		const transicoes: TransicoesType[] = [
 			[["}"], AutomatoLexico.q15],
-			[[...Digitos, ...Letras, ...Simbolos, " ", "\r", "\n"], AutomatoLexico.q14],
+			[[...Digitos, ...Letras, ...Simbolos, " ", "\r", "\n", "\t"], AutomatoLexico.q14],
 		];
 
 		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
@@ -378,7 +378,7 @@ export class AutomatoLexico {
 		const transicoes: TransicoesType[] = [
 			[["-"], AutomatoLexico.q17],
 			[[">", "="], AutomatoLexico.q19],
-			[[" ", "\r", "\n", ...Letras, ...Digitos, ...Simbolos], AutomatoLexicoUtils.ignorar],
+			[[" ", "\r", "\n", "\t", ...Letras, ...Digitos, ...Simbolos], AutomatoLexicoUtils.ignorar],
 		];
 		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
 
@@ -418,7 +418,7 @@ export class AutomatoLexico {
 
 		const transicoes: TransicoesType[] = [
 			[[">", "="], AutomatoLexico.q19],
-			[[" ", "\r", "\n", ...Letras, ...Digitos, ...Simbolos], AutomatoLexicoUtils.ignorar],
+			[[" ", "\r", "\n", "\t", ...Letras, ...Digitos, ...Simbolos], AutomatoLexicoUtils.ignorar],
 		];
 		const proximo = AutomatoLexicoUtils.proximoEstado(transicoes, arquivo[AutomatoLexico.indexGeral]);
 

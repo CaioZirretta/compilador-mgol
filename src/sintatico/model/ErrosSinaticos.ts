@@ -1,3 +1,3 @@
-export enum ErroSintatico {
+export enum ErrosSintatico {
 	
 }

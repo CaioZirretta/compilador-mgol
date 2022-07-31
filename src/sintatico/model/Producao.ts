@@ -14,7 +14,7 @@ export class Producao {
 		"A → ES A",
 		"ES → leia id pt_v",
 		"ES → escreva ARG pt_v",
-		"ARG → literal",
+		"ARG → lit",
 		"ARG → num",
 		"ARG → id",
 		"A → CMD A",
@@ -45,11 +45,13 @@ export class Producao {
 		return Producao.producoes[numero - 1];
 	}
 
-	static ladoEsquerdo(numero: number) {
-		return Producao.producoes[numero - 1].split("→")[0].trim();
+	static ladoEsquerdo(producao: string): string {
+		const retorno = producao.split("→")[0].trim();
+		return retorno;
 	}
 	
-	static ladoDireito(numero: number) {
-		return Producao.producoes[numero - 1].split("→")[1].split(" ");
+	static ladoDireito(producao: string) {
+		const retorno =producao.split("→")[1];
+		return retorno;
 	}
 }
