@@ -1,3 +1,4 @@
+import { AutomatoSintatico } from "./AutomatoSintatico";
 export class Producao {
 	static readonly producoes = [
 		"P' → P",
@@ -45,13 +46,24 @@ export class Producao {
 		return Producao.producoes[numero - 1];
 	}
 
+	static doEstado(t: string): string[] {
+		const linha: number = AutomatoSintatico.getRowIndex(t);
+		const proximosEstados: string[] = [];
+
+		for (let i = 1; i < AutomatoSintatico.getColumnIndex("eof"); i++) {
+			AutomatoSintatico.tabelaSintatica[linha][i] ? proximosEstados.push(AutomatoSintatico.tabelaSintatica[0][i]) : null;
+		}
+
+		return proximosEstados;
+	}
+
 	static ladoEsquerdo(producao: string): string {
 		const retorno = producao.split("→")[0].trim();
 		return retorno;
 	}
-	
+
 	static ladoDireito(producao: string) {
-		const retorno =producao.split("→")[1];
+		const retorno = producao.split("→")[1];
 		return retorno;
 	}
 }

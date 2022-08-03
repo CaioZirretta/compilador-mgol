@@ -1,3 +1,4 @@
+import { arquivoFonte } from './../../app';
 import { TokenClasse, TokenTipo } from "../model/Token";
 import { Simbolos } from "../dicionario/Simbolos";
 import { AutomatoLexico, TransicoesType } from "../model/AutomatoLexico";
@@ -17,18 +18,18 @@ export class AutomatoLexicoUtils {
 	static quebraDeLinha(arquivo: string) {
 		if (arquivo[AutomatoLexico.indexGeral] === "\n") {
 			AutomatoLexico.linha++;
-			AutomatoLexico.coluna = 1;
+			// AutomatoLexico.coluna = 1;
 		}
 	}
 
 	static aumentarIndex() {
 		AutomatoLexico.indexGeral++;
-		AutomatoLexico.coluna++;
+		// AutomatoLexico.coluna++;
 	}
 
 	static diminuirIndex() {
 		AutomatoLexico.indexGeral--;
-		AutomatoLexico.coluna--;
+		// AutomatoLexico.coluna--;
 	}
 
 	static log(arquivo: string, estado: string) {
@@ -55,7 +56,7 @@ export class AutomatoLexicoUtils {
 			estado,
 			"| Geral: " + AutomatoLexico.indexGeral,
 			"| Auxiliar: " + AutomatoLexico.indexAuxiliar,
-			"| Coluna: " + AutomatoLexico.coluna,
+			// "| Coluna: " + AutomatoLexico.coluna,
 			"| Letra: " + char,
 		);
 	}
@@ -80,9 +81,10 @@ export class AutomatoLexicoUtils {
 	static erroContinuaLeitura(arquivo: string) {
 		const erro: Token = {
 			classe: TokenClasse.ERRO,
-			lexema: `Erro léxico: caractere inválido na linha ${AutomatoLexico.linha} e coluna ${
-				AutomatoLexico.coluna - 1
-			}`,
+			// lexema: `Erro léxico: caractere inválido na linha ${AutomatoLexico.linha} e coluna ${
+			// 	AutomatoLexico.coluna - 1
+			// }`,
+			lexema: `Erro léxico: caractere ${arquivoFonte[AutomatoLexico.indexGeral - 1]} inválido na linha ${AutomatoLexico.linha}`,
 			tipo: TokenTipo.Nulo,
 		};
 
@@ -92,9 +94,10 @@ export class AutomatoLexicoUtils {
 	static erroAteSimbolo(arquivo: string) {
 		const erro: Token = {
 			classe: TokenClasse.ERRO,
-			lexema: `Erro léxico: caractere inválido na linha ${AutomatoLexico.linha} e coluna ${
-				AutomatoLexico.coluna - 1
-			}`,
+			// lexema: `Erro léxico: caractere inválido na linha ${AutomatoLexico.linha} e coluna ${
+			// 	AutomatoLexico.coluna - 1
+			// }`,
+			lexema: `Erro léxico: caractere ${arquivoFonte[AutomatoLexico.indexGeral - 1]} inválido na linha ${AutomatoLexico.linha}`,
 			tipo: TokenTipo.Nulo,
 		};
 

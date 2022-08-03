@@ -9,8 +9,8 @@ export class AutomatoLexico {
 	static indexAuxiliar: number = 0;
 	static indexGeral: number = 0;
 
-	static coluna: number = 1;
-	static linha: number = 1;
+	static coluna: number = 0;
+	static linha: number = 0;
 
 	static iniciar(arquivo: string): Token | void {
 		// console.log("\n============ Automato iniciando =============");
