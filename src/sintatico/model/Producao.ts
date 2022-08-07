@@ -47,11 +47,12 @@ export class Producao {
 	}
 
 	static doEstado(t: string): string[] {
-		const linha: number = AutomatoSintatico.getRowIndex(t);
+		const linha: number = AutomatoSintatico.pegarIndiceLinha(t);
 		const proximosEstados: string[] = [];
 
-		for (let i = 1; i < AutomatoSintatico.getColumnIndex("eof"); i++) {
-			AutomatoSintatico.tabelaSintatica[linha][i] ? proximosEstados.push(AutomatoSintatico.tabelaSintatica[0][i]) : null;
+		for (let i = 1; i < AutomatoSintatico.pegarIndiceColuna("eof") + 1; i++) {
+			AutomatoSintatico.tabelaSintatica[linha][i] && !AutomatoSintatico.tabelaSintatica[linha][i].startsWith("E")
+			 ? proximosEstados.push(AutomatoSintatico.tabelaSintatica[0][i]) : null;
 		}
 
 		return proximosEstados;
