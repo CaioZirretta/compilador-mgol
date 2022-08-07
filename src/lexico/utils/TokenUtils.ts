@@ -1,4 +1,4 @@
-import { Simbolos } from "./../dicionario/Simbolos";
+import { ReservadasFechadas, ReservadasGeradas, Simbolos } from "./../dicionario/Simbolos";
 import { arquivoFonte } from "./../../app";
 import { Reservadas } from "../dicionario/Simbolos";
 import { AutomatoLexico } from "../model/AutomatoLexico";
@@ -16,11 +16,7 @@ export class TokenUtils {
 	}
 
 	static novoTokenId(arquivo: string) {
-		const ajuste =
-			Simbolos.includes(arquivo[AutomatoLexico.indexGeral - 1]) ||
-			arquivo[AutomatoLexico.indexGeral - 1] === " "
-				? -1
-				: 0;
+		const ajuste = Simbolos.includes(arquivo[AutomatoLexico.indexGeral - 1]) || arquivo[AutomatoLexico.indexGeral - 1] === " " ? -1 : 0;
 
 		let palavra = arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral + ajuste);
 
@@ -74,6 +70,9 @@ export class TokenUtils {
 
 		if (TokenUtils.eReservada(palavra)) {
 			token = TokenUtils.tokenReservado(palavra);
+			if (ReservadasFechadas.includes(token.lexema)) {
+				ReservadasGeradas.push(token.lexema);
+			}
 			return token;
 		}
 

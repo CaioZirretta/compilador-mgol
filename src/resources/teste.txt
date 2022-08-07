@@ -1,5 +1,5 @@
 inicio
 	varinicio
 		inteiro X;
-	varfim; 
-fim ,
+	varfim;
+fim

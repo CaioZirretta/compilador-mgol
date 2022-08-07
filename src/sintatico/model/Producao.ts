@@ -42,6 +42,8 @@ export class Producao {
 		"A → fim",
 	];
 
+	static producoesGeradas: string[] = []
+
 	static of(numero: number) {
 		return Producao.producoes[numero - 1];
 	}

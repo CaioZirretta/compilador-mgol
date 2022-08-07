@@ -4,7 +4,7 @@ export type ErroSintatico = {
 	detalhes: {
 		recebido: {
 			token: string;
-			linha?: string;
+			linha?: number;
 		};
 		esperado?: string;
 	};
