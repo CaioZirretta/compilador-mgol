@@ -1,4 +1,4 @@
-import { ReservadasFechadas, ReservadasGeradas, Simbolos } from "./../dicionario/Simbolos";
+import { Simbolos } from "./../dicionario/Simbolos";
 import { arquivoFonte } from "./../../app";
 import { Reservadas } from "../dicionario/Simbolos";
 import { AutomatoLexico } from "../model/AutomatoLexico";
@@ -9,10 +9,14 @@ export class TokenUtils {
 	static tokenEOF() {
 		if (AutomatoLexico.indexGeral > arquivoFonte.length)
 			return {
-				classe: TokenClasse.EOF,
+				classe: TokenClasse.eof,
 				lexema: "EOF",
 				tipo: TokenTipo.Nulo,
 			} as Token;
+	}
+
+	static tokenVazio(): Token{
+		return { classe: "", lexema: "", tipo: ""} as Token;
 	}
 
 	static novoTokenId(arquivo: string) {
@@ -31,7 +35,7 @@ export class TokenUtils {
 
 	static novoTokenInteiro(arquivo: string) {
 		const token: Token = {
-			classe: TokenClasse.Num,
+			classe: TokenClasse.num,
 			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Inteiro,
 		};
@@ -63,16 +67,13 @@ export class TokenUtils {
 		return token;
 	}
 
-	private static gerarTokenId(palavra: string) {
+	static gerarTokenId(palavra: string) {
 		let token: Token;
 
 		palavra = TokenUtils.formatarPalavra(palavra);
 
 		if (TokenUtils.eReservada(palavra)) {
 			token = TokenUtils.tokenReservado(palavra);
-			if (ReservadasFechadas.includes(token.lexema)) {
-				ReservadasGeradas.push(token.lexema);
-			}
 			return token;
 		}
 
@@ -81,8 +82,8 @@ export class TokenUtils {
 		return token;
 	}
 
-	private static tokenReservado(palavra: string): Token {
-		let novoToken: Token = { classe: TokenClasse.ERRO, lexema: "EMPTY", tipo: "EMPTY" };
+	static tokenReservado(palavra: string): Token {
+		let novoToken: Token = { classe: TokenClasse.erro, lexema: "EMPTY", tipo: "EMPTY" };
 
 		TabelaDeSimbolos.some((token) => {
 			if (token.lexema === palavra) {
@@ -94,7 +95,7 @@ export class TokenUtils {
 		return novoToken!;
 	}
 
-	private static eReservada(palavra: string) {
+	static eReservada(palavra: string) {
 		return Reservadas.includes(palavra);
 	}
 

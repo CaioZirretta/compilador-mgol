@@ -200,7 +200,7 @@ export class AutomatoLexico {
 
 		if (!proximo) {
 			const token: Token = {
-				classe: TokenClasse.Num,
+				classe: TokenClasse.num,
 				lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 				tipo: TokenTipo.Real,
 			};
@@ -304,7 +304,7 @@ export class AutomatoLexico {
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
-			classe: TokenClasse.Lit,
+			classe: TokenClasse.lit,
 			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Literal,
 		};
@@ -384,7 +384,7 @@ export class AutomatoLexico {
 
 		if (proximo == AutomatoLexicoUtils.ignorar || !proximo) {
 			const token: Token = {
-				classe: TokenClasse.OPR,
+				classe: TokenClasse.opr,
 				lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 				tipo: TokenTipo.Nulo,
 			};
@@ -402,7 +402,7 @@ export class AutomatoLexico {
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
-			classe: TokenClasse.RCB,
+			classe: TokenClasse.rcb,
 			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Nulo,
 		};
@@ -424,7 +424,7 @@ export class AutomatoLexico {
 
 		if (proximo == AutomatoLexicoUtils.ignorar || !proximo) {
 			const token: Token = {
-				classe: TokenClasse.OPR,
+				classe: TokenClasse.opr,
 				lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 				tipo: TokenTipo.Nulo,
 			};
@@ -441,7 +441,7 @@ export class AutomatoLexico {
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
-			classe: TokenClasse.OPR,
+			classe: TokenClasse.opr,
 			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Nulo,
 		};
@@ -456,7 +456,7 @@ export class AutomatoLexico {
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
-			classe: TokenClasse.OPM,
+			classe: TokenClasse.opm,
 			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Nulo,
 		};
@@ -469,7 +469,7 @@ export class AutomatoLexico {
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
-			classe: TokenClasse.AB_P,
+			classe: TokenClasse.ab_p,
 			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Nulo,
 		};
@@ -482,7 +482,7 @@ export class AutomatoLexico {
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
-			classe: TokenClasse.FC_P,
+			classe: TokenClasse.fc_p,
 			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Nulo,
 		};
@@ -495,7 +495,7 @@ export class AutomatoLexico {
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
-			classe: TokenClasse.PT_V,
+			classe: TokenClasse.pt_v,
 			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Nulo,
 		};
@@ -508,7 +508,7 @@ export class AutomatoLexico {
 		AutomatoLexicoUtils.quebraDeLinha(arquivo);
 
 		const token: Token = {
-			classe: TokenClasse.Vir,
+			classe: TokenClasse.vir,
 			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Nulo,
 		};

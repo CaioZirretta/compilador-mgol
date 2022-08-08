@@ -1,23 +1,23 @@
 export type Token = {
-	classe: TokenClasse;
+	classe: TokenClasse | string;
 	lexema: string;
 	tipo: TokenTipo | string | null;
 };
 
-export const enum TokenClasse {
-	Num = "num",
-	Lit = "lit",
+export enum TokenClasse {
+	num = "num",
+	lit = "lit",
 	id = "id",
 	comentario = "comentario",
-	EOF = "eof",
-	OPR = "opr",
-	RCB = "rcb",
-	OPM = "opm",
-	AB_P = "ab_p",
-	FC_P = "fc_p",
-	PT_V = "pt_v",
-	ERRO = "erro",
-	Vir = "vir",
+	eof = "eof",
+	opr = "opr",
+	rcb = "rcb",
+	opm = "opm",
+	ab_p = "ab_p",
+	fc_p = "fc_p",
+	pt_v = "pt_v",
+	erro = "erro",
+	vir = "vir",
 
 	inicio = "inicio",
 	varinicio = "varinicio",
@@ -35,7 +35,7 @@ export const enum TokenClasse {
 	real = "real",
 }
 
-export const enum TokenTipo {
+export enum TokenTipo {
 	Inteiro = "inteiro",
 	Real = "real",
 	Literal = "literal",
@@ -43,3 +43,9 @@ export const enum TokenTipo {
 }
 
 export const TokenLista: Token[] = [];
+
+export function encontrarTerminal(lexema: string): string {
+	return Object.keys(TokenClasse)
+		.filter((tc) => tc === lexema)
+		.join();
+}

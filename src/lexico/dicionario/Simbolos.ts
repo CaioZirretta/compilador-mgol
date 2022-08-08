@@ -5,7 +5,3 @@ export const Letras: string[] = ["A","B","C","D","E","F","G","H","I","J","K","L"
 export const Simbolos: string[] = [",",";",":","!","?","\\","*","+","-","/","(",")","{","}","[","]","<",">","=","'",'"',"_",];
 
 export const Reservadas: string[] = ["inicio","varinicio","varfim","escreva","leia","se","entao","fimse","repita","fimrepita","fim","inteiro","literal","real"];
-
-export const ReservadasFechadas: string[] = ["inicio","varinicio","varfim","se","entao","fimse","repita","fimrepita","fim"];
-
-export const ReservadasGeradas: string[] = [];

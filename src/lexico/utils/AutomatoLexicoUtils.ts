@@ -80,7 +80,7 @@ export class AutomatoLexicoUtils {
 
 	static erroContinuaLeitura(arquivo: string) {
 		const erro: Token = {
-			classe: TokenClasse.ERRO,
+			classe: TokenClasse.erro,
 			// lexema: `Erro léxico: caractere inválido na linha ${AutomatoLexico.linha} e coluna ${
 			// 	AutomatoLexico.coluna - 1
 			// }`,
@@ -93,7 +93,7 @@ export class AutomatoLexicoUtils {
 
 	static erroAteSimbolo(arquivo: string) {
 		const erro: Token = {
-			classe: TokenClasse.ERRO,
+			classe: TokenClasse.erro,
 			// lexema: `Erro léxico: caractere inválido na linha ${AutomatoLexico.linha} e coluna ${
 			// 	AutomatoLexico.coluna - 1
 			// }`,

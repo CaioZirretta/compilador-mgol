@@ -20,3 +20,5 @@ export const TabelaDeSimbolos: Token[] = [
 export function tabelaDeSimbolosLexemas() {
 	return TabelaDeSimbolos.map((t) => t.lexema);
 }
+
+

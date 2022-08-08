@@ -1,13 +1,14 @@
 import { ErroUtils } from "./utils/ErroUtils";
 import { arquivoFonte } from "../app";
 import { AnalisadorLexico } from "../lexico/AnalisadorLexico";
-import { Token } from "../lexico/model/Token";
-import { tokenExemplo } from "../test/tokenExemplo";
+import { encontrarTerminal, Token } from "../lexico/model/Token";
 import { AutomatoSintatico } from "./model/AutomatoSintatico";
 import { Producao } from "./model/Producao";
+import { TokenUtils } from "../lexico/utils/TokenUtils";
 
 export class AnalisadorSintatico {
-	private ip: Token = tokenExemplo;
+	private ip: Token = TokenUtils.tokenVazio();
+	private pilhaReserva: Token[] = [];
 
 	parser() {
 		this.ip = this.proximoToken();
@@ -30,31 +31,17 @@ export class AnalisadorSintatico {
 			if (ACTION === "shift") {
 				console.log("\nshifting...");
 				log(s, t, a.classe, A, β, ACTION);
-				AutomatoSintatico.empilhar(a.classe);
-				AutomatoSintatico.empilhar(t);
-				this.ip = this.proximoToken();
+
+				this.shift(a, t);
+
 				log(s, t, a.classe, A, β, ACTION);
 			} else if (ACTION === "reduce") {
 				console.log("\nreducing...");
-
-				const producao: string = Producao.of(parseInt(t));
-				A = Producao.ladoEsquerdo(producao);
-				β = Producao.ladoDireito(producao).trim();
 				log(s, t, a.classe, A, β, ACTION);
 
-				β.split(" ").forEach(() => {
-					AutomatoSintatico.desempilhar();
-					AutomatoSintatico.desempilhar();
-				});
-
-				t = AutomatoSintatico.topoDaPilha();
-
-				AutomatoSintatico.empilhar(A);
-				AutomatoSintatico.empilhar(this.desvio(t, A));
+				this.reduce(t, A, β);
 
 				log(s, t, a.classe, A, β, ACTION);
-				console.log(producao);
-				Producao.producoesGeradas.push(producao);
 			} else if (ACTION === "acc") {
 				console.log(Producao.producoes[0]);
 				Producao.producoesGeradas.push(Producao.producoes[0]);
@@ -63,6 +50,7 @@ export class AnalisadorSintatico {
 				console.log("\nexchanging...");
 				log(s, t, a.classe, A, β, ACTION);
 				this.substituicao(s, t, a);
+				log(s, t, a.classe, A, β, ACTION);
 			} else {
 				if (this.ip.classe === "eof") return;
 				console.log("\npanicking...");
@@ -77,6 +65,38 @@ export class AnalisadorSintatico {
 			token = AnalisadorLexico.scanner(arquivoFonte);
 		} while (!token);
 		return token;
+	}
+
+	private shift(a: Token, t: string) {
+		AutomatoSintatico.empilhar(a.classe);
+		AutomatoSintatico.empilhar(t);
+
+		if (this.pilhaReserva.length === 0) {
+			this.ip = this.proximoToken();
+		} else {
+			this.ip = this.pilhaReserva[this.pilhaReserva.length - 1];
+			this.pilhaReserva.pop();
+		}
+	}
+
+	private reduce(t: string, A: string, β: string) {
+		const producao: string = Producao.of(parseInt(t));
+		A = Producao.ladoEsquerdo(producao);
+		β = Producao.ladoDireito(producao).trim();
+
+		β.split(" ").forEach(() => {
+			AutomatoSintatico.desempilhar();
+			AutomatoSintatico.desempilhar();
+		});
+
+		t = AutomatoSintatico.topoDaPilha();
+
+		AutomatoSintatico.empilhar(A);
+		AutomatoSintatico.empilhar(this.desvio(t, A));
+
+		Producao.producoesGeradas.push(producao);
+
+		this.pilhaReserva.length !== 0 ? this.pilhaReserva.pop() : null;
 	}
 
 	private acao(s: string, a: Token): string[] {
@@ -126,18 +146,25 @@ export class AnalisadorSintatico {
 
 		t = t.slice(0);
 
+		const tokenEsperado: string[] = Producao.doEstado(s);
+
 		if (ACTION.startsWith("R")) {
-			const tokenEsperado: string[] = Producao.doEstado(s);
+			a = TokenUtils.tokenVazio();
+
+			a.classe = encontrarTerminal(tokenEsperado.join());
+
 			ErroUtils.substituicaoErroDescricao(a.classe, tokenEsperado);
-			this.deReducao(t);
+
+			this.deReducao(t, a);
 		}
 
 		if (ACTION.startsWith("S")) {
+			ErroUtils.substituicaoErroDescricao(a.classe, tokenEsperado);
 			this.deEmpilhamento(t, a);
 		}
 	}
 
-	private deReducao(t: string) {
+	private deReducao(t: string, a: Token) {
 		const producao: string = Producao.of(parseInt(t));
 		const A = Producao.ladoEsquerdo(producao);
 		const β = Producao.ladoDireito(producao).trim();
@@ -151,12 +178,18 @@ export class AnalisadorSintatico {
 
 		AutomatoSintatico.empilhar(A);
 		AutomatoSintatico.empilhar(this.desvio(t, A));
+
+		this.pilhaReserva.push(this.ip);
+		// console.log(this.pilhaReserva)
+		this.ip = a;
 	}
 
 	private deEmpilhamento(t: string, a: Token) {
 		AutomatoSintatico.empilhar(a.classe);
 		AutomatoSintatico.empilhar(t);
-		this.ip = this.proximoToken();
+		this.pilhaReserva.push(this.ip);
+		// console.log(this.pilhaReserva)
+		this.ip = a;
 	}
 
 	private descartarAteProximoToken(a: string, t: string) {

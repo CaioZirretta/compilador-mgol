@@ -1,5 +1,6 @@
 inicio
 	varinicio
-		inteiro X;
 	varfim;
+	escreva "ABC";
+	leia A
 fim
