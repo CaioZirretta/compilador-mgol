@@ -2,5 +2,8 @@ inicio
 	varinicio
 	varfim;
 	escreva "ABC";
-	leia A
+	leia A;
+	se(A>B)
+	entao
+	fimse;
 fim

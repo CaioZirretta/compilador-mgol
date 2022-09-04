@@ -25,35 +25,35 @@ export class AnalisadorSintatico {
 
 			let [ACTION, t]: string[] = this.acao(s, a);
 
-			console.log("\nnew cycle...");
-			log(s, t, a.classe, A, β, ACTION);
+			// console.log("\nnew cycle...");
+			// log(s, t, a.classe, A, β, ACTION);
 
 			if (ACTION === "shift") {
-				console.log("\nshifting...");
-				log(s, t, a.classe, A, β, ACTION);
+				// console.log("\nshifting...");
+				// log(s, t, a.classe, A, β, ACTION);
 
 				this.shift(a, t);
 
-				log(s, t, a.classe, A, β, ACTION);
+				// log(s, t, a.classe, A, β, ACTION);
 			} else if (ACTION === "reduce") {
-				console.log("\nreducing...");
-				log(s, t, a.classe, A, β, ACTION);
+				// console.log("\nreducing...");
+				// log(s, t, a.classe, A, β, ACTION);
 
 				this.reduce(t, A, β);
 
-				log(s, t, a.classe, A, β, ACTION);
+				// log(s, t, a.classe, A, β, ACTION);
 			} else if (ACTION === "acc") {
-				console.log(Producao.producoes[0]);
+				// console.log(Producao.producoes[0]);
 				Producao.producoesGeradas.push(Producao.producoes[0]);
 				return;
 			} else if (ACTION === "exchange") {
-				console.log("\nexchanging...");
-				log(s, t, a.classe, A, β, ACTION);
+				// console.log("\nexchanging...");
+				// log(s, t, a.classe, A, β, ACTION);
 				this.substituicao(s, t, a);
-				log(s, t, a.classe, A, β, ACTION);
+				// log(s, t, a.classe, A, β, ACTION);
 			} else {
 				if (this.ip.classe === "eof") return;
-				console.log("\npanicking...");
+				// console.log("\npanicking...");
 				this.descartarAteProximoToken(a.classe, AutomatoSintatico.topoDaPilha());
 			}
 		}
