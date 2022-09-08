@@ -1,7 +1,10 @@
 inicio
 	varinicio
 		real A, B;
-		inteiro C;
-		inteiro D, E;
 	varfim;
+	leia B;
+	escreva A;
+	escreva "123";
+	escreva 3;
 fim
+

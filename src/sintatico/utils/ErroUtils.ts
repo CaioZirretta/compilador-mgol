@@ -1,5 +1,7 @@
+import { AnalisadorSemantico } from './../../semantico/AnalisadorSemantico';
 import { AutomatoLexico } from "../../lexico/model/AutomatoLexico";
 import { Token } from "../../lexico/model/Token";
+import { ErroSemantico } from "../../semantico/model/ErroSemantico";
 import { ErroSintatico } from "../model/ErroSinaticos";
 
 export class ErroUtils {
@@ -44,5 +46,16 @@ export class ErroUtils {
 			},
 			acao: `Inserindo token artificalmente: ${proximosEstados}`,
 		} as ErroSintatico);
+	}
+
+	static erroSemanticoDescricao(mensagem:string, causa?: string) {
+		console.log({
+			erro: 'Erro semântico',
+			mensagem: mensagem,
+			detalhes: {
+				causa: causa,
+				linha: AutomatoLexico.linha,
+			},
+		} as ErroSemantico);
 	}
 }

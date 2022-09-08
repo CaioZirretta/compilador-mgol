@@ -1,3 +1,4 @@
+import { TabelaDeSimbolos } from './../lexico/model/TabelaDeSimbolos';
 import { ErroUtils } from "./utils/ErroUtils";
 import { arquivoFonte } from "../app";
 import { AnalisadorLexico } from "../lexico/AnalisadorLexico";

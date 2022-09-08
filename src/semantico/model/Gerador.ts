@@ -2,9 +2,10 @@ import * as fs from "fs";
 
 export class Gerador {
 	static codigoFinal: string = Gerador.cabecalho();
+	static abortar: boolean = false;
 
 	gerarCodigo(codigo: string) {
-		fs.writeFileSync(__dirname + "resources/programa.c", codigo);
+		Gerador.abortar ? fs.writeFileSync(__dirname + "resources/programa.c", codigo) : null;
 	}
 
 	static cabecalho() {

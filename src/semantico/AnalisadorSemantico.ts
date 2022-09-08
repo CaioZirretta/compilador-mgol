@@ -1,3 +1,4 @@
+import { ErroUtils } from "./../sintatico/utils/ErroUtils";
 import { TabelaDeSimbolos } from "./../lexico/model/TabelaDeSimbolos";
 import { Token, TokenTipo } from "./../lexico/model/Token";
 import { Producao } from "./../sintatico/model/Producao";
@@ -71,7 +72,7 @@ export class AnalisadorSemantico {
 	}
 
 	static procuraReversa(classe: string) {
-		for (let i = AnalisadorSemantico.pilhaSemantica.length - 1; i > -1; --i) {
+		for (let i = AnalisadorSemantico.pilhaSemantica.length - 1; i >= 0; --i) {
 			if (AnalisadorSemantico.pilhaSemantica[i].classe === classe) {
 				return AnalisadorSemantico.pilhaSemantica[i];
 			}
@@ -82,42 +83,51 @@ export class AnalisadorSemantico {
 		return AnalisadorSemantico.pilhaSemantica[AnalisadorSemantico.pilhaSemantica.length - 1];
 	}
 
-	static regra5(producao: string, A: string, β: string) {}
+	static regra5(producao: string, A: string, β: string) {
+		// Gerador.inserir(`\n\n\n`);
+	}
 
-	static regra6(producao: string, A: string, β: string) {}
+	static regra6(producao: string, A: string, β: string) {
+		AnalisadorSemantico.pilhaSemantica.pop();
+		AnalisadorSemantico.pilhaSemantica.pop();
+		AnalisadorSemantico.pilhaSemantica.pop();
+	}
 
 	static regra7(producao: string, A: string, β: string) {
-		let idPilha = AnalisadorSemantico.procuraReversa("id");
+		let idPilha = AnalisadorSemantico.procuraReversa("id")!;
 
 		const idTabela: Token = TabelaDeSimbolos.find(
 			(simbolo) => simbolo.lexema === idPilha?.lexema
 		)!;
 
-		const TIPO = AnalisadorSemantico.procuraReversa("TIPO")
+		const TIPO = AnalisadorSemantico.procuraReversa("TIPO");
 
 		idTabela.tipo = TIPO!.tipo;
 
 		Gerador.inserir(`, ${idTabela.lexema}`);
 
-		idPilha!.lexema = "L";
-		idPilha!.classe = "L";
+		idPilha.lexema = "L";
+		idPilha.classe = "L";
+
+		AnalisadorSemantico.pilhaSemantica.pop();
+		AnalisadorSemantico.pilhaSemantica.pop();
 	}
 
 	static regra8(producao: string, A: string, β: string) {
-		let idPilha = AnalisadorSemantico.procuraReversa("id");
+		let idPilha = AnalisadorSemantico.procuraReversa("id")!;
 
 		const idTabela: Token = TabelaDeSimbolos.find(
 			(simbolo) => simbolo.lexema === idPilha?.lexema
 		)!;
 
-		const TIPO = AnalisadorSemantico.procuraReversa("TIPO")
+		const TIPO = AnalisadorSemantico.procuraReversa("TIPO");
 
 		idTabela.tipo = TIPO!.tipo;
 
 		Gerador.inserir(idTabela.lexema);
 
-		idPilha!.lexema = "L";
-		idPilha!.classe = "L";
+		idPilha.lexema = "L";
+		idPilha.classe = "L";
 	}
 
 	static regra9(producao: string, A: string, β: string) {
@@ -139,15 +149,69 @@ export class AnalisadorSemantico {
 		Gerador.inserir("\n\tliteral ");
 	}
 
-	static regra13(producao: string, A: string, β: string) {}
+	static regra13(producao: string, A: string, β: string) {
+		let idPilha = AnalisadorSemantico.procuraReversa("id");
+		
+		const idTabela: Token = TabelaDeSimbolos.find(
+			(simbolo) => simbolo.lexema === idPilha?.lexema
+		)!;
 
-	static regra14(producao: string, A: string, β: string) {}
+		switch (idTabela.tipo) {
+			case "real":
+				Gerador.inserir(`\nscanf(“%lf”, &${idTabela.lexema});`);
+				break;
+			case "inteiro":
+				Gerador.inserir(`\nscanf(“%d”, &${idTabela.lexema});`);
+				break;
+			case "literal":
+				Gerador.inserir(`\nscanf(“%s”, ${idTabela.lexema});`);
+				break;
+			default:
+				ErroUtils.erroSemanticoDescricao(
+					`Não foi possível ler a variável`,
+					`Token ${idPilha!.lexema} não definido`
+				);
+		}
+		AnalisadorSemantico.pilhaSemantica.pop();
+		AnalisadorSemantico.pilhaSemantica.pop();
+		AnalisadorSemantico.pilhaSemantica.pop();
+	}
 
-	static regra15(producao: string, A: string, β: string) {}
+	static regra14(producao: string, A: string, β: string) {
+		let ARG = AnalisadorSemantico.procuraReversa("ARG")!;
 
-	static regra16(producao: string, A: string, β: string) {}
+		Gerador.inserir(`\nprintf(${ARG.lexema})`)
+		
+		AnalisadorSemantico.pilhaSemantica.pop();
+	}
 
-	static regra17(producao: string, A: string, β: string) {}
+	static regra15(producao: string, A: string, β: string) {
+		let lit = AnalisadorSemantico.procuraReversa("lit")!;
+		lit.classe = "ARG";
+	}
+
+	static regra16(producao: string, A: string, β: string) {
+		let num = AnalisadorSemantico.procuraReversa("num")!;
+		num.classe = "ARG";
+	}
+
+	static regra17(producao: string, A: string, β: string) {
+		let idPilha = AnalisadorSemantico.procuraReversa("id")!;
+		
+		const idTabela: Token = TabelaDeSimbolos.find(
+			(simbolo) => simbolo.lexema === idPilha?.lexema
+		)!;
+
+		if (!idTabela.tipo) {
+			ErroUtils.erroSemanticoDescricao(
+				`Não foi possível ler a variável`,
+				`Token ${idPilha.lexema} não definido`
+			);
+			return;
+		}
+
+		idPilha.classe = "ARG";
+	}
 
 	static regra18(producao: string, A: string, β: string) {}
 

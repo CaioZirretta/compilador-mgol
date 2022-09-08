@@ -1,7 +1,8 @@
 export type ErroSemantico = {
 	erro: string;
 	mensagem: string;
-	detalhes: {
+	detalhes?: {
 		causa: string;
+		linha: number;
 	};
 };
