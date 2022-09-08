@@ -1,9 +1,7 @@
 inicio
 	varinicio
+		real A, B;
+		inteiro C;
+		inteiro D, E;
 	varfim;
-	escreva "ABC";
-	leia A;
-	se(A>B)
-	entao
-	fimse;
 fim

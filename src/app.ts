@@ -1,11 +1,11 @@
+import { AnalisadorSemantico } from './semantico/AnalisadorSemantico';
+import { TabelaDeSimbolos } from './lexico/model/TabelaDeSimbolos';
 import { Producao } from './sintatico/model/Producao';
 import * as fs from "fs";
-import { AutomatoLexico } from "./lexico/model/AutomatoLexico";
-import { AnalisadorLexico } from "./lexico/AnalisadorLexico";
-import { Token, TokenLista } from "./lexico/model/Token";
 import { AnalisadorSintatico } from "./sintatico/AnalisadorSintatico";
+import { Gerador } from './semantico/model/Gerador';
 
-export const arquivoFonte: string = fs.readFileSync(__dirname + "/resources/FONTE.txt", "utf-8");
+export const arquivoFonte: string = fs.readFileSync(__dirname + "/resources/teste.txt", "utf-8");
 
 // function main(): void {
 // 	do {
@@ -18,4 +18,8 @@ export const arquivoFonte: string = fs.readFileSync(__dirname + "/resources/FONT
 
 new AnalisadorSintatico().parser();
 
-console.dir(Producao.producoesGeradas, {maxArrayLength: null})
+console.log(TabelaDeSimbolos)
+console.log(AnalisadorSemantico.pilhaSemantica)
+console.log(Gerador.codigoFinal);
+// console.dir(Producao.producoesGeradas, {maxArrayLength: null})
+

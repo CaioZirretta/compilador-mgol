@@ -5,6 +5,8 @@ import { encontrarTerminal, Token } from "../lexico/model/Token";
 import { AutomatoSintatico } from "./model/AutomatoSintatico";
 import { Producao } from "./model/Producao";
 import { TokenUtils } from "../lexico/utils/TokenUtils";
+import { AnalisadorSemanticoUtils } from "../semantico/utils/AnalisadorSemanticoUtils";
+import { AnalisadorSemantico } from "../semantico/AnalisadorSemantico";
 
 export class AnalisadorSintatico {
 	private ip: Token = TokenUtils.tokenVazio();
@@ -14,7 +16,9 @@ export class AnalisadorSintatico {
 		this.ip = this.proximoToken();
 
 		const log = (s: string, t: string, a: string, A: string, β: string, ACTION: string) => {
-			return console.log(`pilha: ${AutomatoSintatico.pilha} | ip: ${this.ip.classe} | s: ${s} | t: ${t} | a: ${a} | A: ${A} | β: ${β} | ACTION: ${ACTION}`);
+			return console.log(
+				`pilha: ${AutomatoSintatico.pilha} | ip: ${this.ip.classe} | s: ${s} | t: ${t} | a: ${a} | A: ${A} | β: ${β} | ACTION: ${ACTION}`
+			);
 		};
 
 		while (true) {
@@ -51,6 +55,7 @@ export class AnalisadorSintatico {
 				// log(s, t, a.classe, A, β, ACTION);
 				this.substituicao(s, t, a);
 				// log(s, t, a.classe, A, β, ACTION);
+				AnalisadorSemanticoUtils.cancelarCriacaoDeCodigo();
 			} else {
 				if (this.ip.classe === "eof") return;
 				// console.log("\npanicking...");
@@ -70,6 +75,12 @@ export class AnalisadorSintatico {
 	private shift(a: Token, t: string) {
 		AutomatoSintatico.empilhar(a.classe);
 		AutomatoSintatico.empilhar(t);
+
+		AnalisadorSemantico.empilhar({
+			classe: this.ip.classe,
+			lexema: this.ip.lexema,
+			tipo: this.ip.tipo,
+		} as Token);
 
 		if (this.pilhaReserva.length === 0) {
 			this.ip = this.proximoToken();
@@ -95,6 +106,8 @@ export class AnalisadorSintatico {
 		AutomatoSintatico.empilhar(this.desvio(t, A));
 
 		Producao.producoesGeradas.push(producao);
+
+		AnalisadorSemantico.iniciar(producao, A, β);
 
 		this.pilhaReserva.length !== 0 ? this.pilhaReserva.pop() : null;
 	}
@@ -140,6 +153,7 @@ export class AnalisadorSintatico {
 		return elemento;
 	}
 
+	// Tratamento de erro por substuição de token
 	private substituicao(s: string, t: string, a: Token) {
 		const linha: number = AutomatoSintatico.pegarIndiceLinha(s);
 		const ACTION: string = AutomatoSintatico.primeiroElementoDe(linha);
@@ -191,7 +205,7 @@ export class AnalisadorSintatico {
 		// console.log(this.pilhaReserva)
 		this.ip = a;
 	}
-
+	// Tratamento de erro por descarte de token
 	private descartarAteProximoToken(a: string, t: string) {
 		const proximosEstados: string[] = Producao.doEstado(t);
 
