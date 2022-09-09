@@ -17,6 +17,21 @@ export const TabelaDeSimbolos: Token[] = [
 	{ classe: TokenClasse.real, lexema: "real", tipo: "real" },
 ];
 
-export function tabelaDeSimbolosLexemas() {
+export function tabelaDeSimbolosLexemas(): string[] {
 	return TabelaDeSimbolos.map((t) => t.lexema);
+}
+
+export function verificarDeclaracaoId(simbolo: string): boolean {
+	const idTabela: Token = TabelaDeSimbolos.find(
+		(s) => s.lexema === simbolo && s.tipo !== "nulo"
+	)!;
+	return idTabela ? true : false;
+}
+
+export function retornaSimboloPorTipo(lexema: string): Token {
+	return TabelaDeSimbolos.filter((s) => {
+		if (s.lexema === lexema) {
+			return s;
+		}
+	})[0];
 }

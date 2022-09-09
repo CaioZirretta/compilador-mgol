@@ -1,6 +1,3 @@
-import { AnalisadorSemantico } from './semantico/AnalisadorSemantico';
-import { TabelaDeSimbolos } from './lexico/model/TabelaDeSimbolos';
-import { Producao } from './sintatico/model/Producao';
 import * as fs from "fs";
 import { AnalisadorSintatico } from "./sintatico/AnalisadorSintatico";
 import { Gerador } from './semantico/model/Gerador';
@@ -18,8 +15,8 @@ export const arquivoFonte: string = fs.readFileSync(__dirname + "/resources/test
 
 new AnalisadorSintatico().parser();
 
-console.log(TabelaDeSimbolos)
-console.log(AnalisadorSemantico.pilhaSemantica)
-console.log(Gerador.codigoFinal);
+// console.log(TabelaDeSimbolos)
+// console.log(AnalisadorSemantico.pilhaSemantica)
+console.log(Gerador.gerarCodigo());
 // console.dir(Producao.producoesGeradas, {maxArrayLength: null})
 

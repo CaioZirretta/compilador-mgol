@@ -4,7 +4,12 @@ inicio
 	varfim;
 	leia B;
 	escreva A;
-	escreva "123";
-	escreva 3;
+	se(B>2)
+		entao
+		escreva "B esta entre 2 e 4";
+		se(B>2)
+			entao
+			escreva "B esta entre 2 e 4";
+		fimse
+	fimse
 fim
-
