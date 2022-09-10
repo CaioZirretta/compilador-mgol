@@ -192,9 +192,30 @@ export class AnalisadorSemantico {
 	}
 
 	static regra14() {
-		let ARG = AnalisadorSemantico.procuraReversa("ARG")!;
+		let arg = AnalisadorSemantico.procuraReversa("ARG")!;
 
-		ARG ? Gerador.inserir(`\n\tprintf(${ARG.lexema});`) : null;
+		if(arg.tipo === 'nulo'){
+			const idTabela = retornaSimboloPorTipo(arg.lexema);
+			
+			switch (idTabela.tipo) {
+				case "real":
+					arg ? Gerador.inserir(`\n\tprintf("%lf", ${arg.lexema});`) : null;
+					break;
+				case "inteiro":
+					arg ? Gerador.inserir(`\n\tprintf("%d", ${arg.lexema});`) : null;
+					break;
+				case "literal":
+					arg ? Gerador.inserir(`\n\tprintf("%s", ${arg.lexema});`) : null;
+					break;
+				default:
+					ErroUtils.erroSemanticoDescricao(
+						`Não foi possível ler a variável`,
+						`Token ${arg!.lexema} não definido`
+					);
+			}
+		}
+
+		arg ? Gerador.inserir(`\n\tprintf(${arg.lexema});`) : null;
 
 		AnalisadorSemantico.desempilhar(3);
 	}
@@ -251,7 +272,7 @@ export class AnalisadorSemantico {
 			return;
 		}
 
-		Gerador.inserir(`\n${idPilha.lexema} ${rcb.tipo} ${ld.lexema};`);
+		Gerador.inserir(`\n\t${idPilha.lexema} = ${ld.lexema};`);
 		AnalisadorSemantico.desempilhar(4);
 	}
 
@@ -284,7 +305,7 @@ export class AnalisadorSemantico {
 
 		Gerador.inserirTemporaria(ld);
 
-		oprd2.lexema = ld;
+		oprd2.lexema = `T${Gerador.temporarias - 1}`;
 		oprd2.classe = "LD";
 		AnalisadorSemantico.desempilhar(2);
 	}
@@ -357,7 +378,11 @@ export class AnalisadorSemantico {
 
 	static regra33() {}
 
-	static regra34() {}
+	static regra34() {
+		let exp_r = AnalisadorSemantico.procuraReversa("EXP_R")!;
+		Gerador.inserir(`\n\twhile(${exp_r ? exp_r.lexema : null}){`);
+		AnalisadorSemantico.desempilhar(4);
+	}
 
 	static regra35() {}
 
@@ -365,7 +390,9 @@ export class AnalisadorSemantico {
 
 	static regra37() {}
 
-	static regra38() {}
+	static regra38() {
+		Gerador.inserir(`\n\t}`)
+	}
 
 	static ignorar() {}
 }

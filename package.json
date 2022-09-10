@@ -6,7 +6,8 @@
   "scripts": {
     "scratch": "ts-node-dev ./src/test/scratch.ts",
     "test": "jest",
-    "dev": "ts-node-dev ./src/app"
+    "dev": "ts-node-dev ./src/app.ts",
+    "watch": "ts-node-dev --respawn --watch ./src ./src/app.ts"
   },
   "repository": {
     "type": "git",

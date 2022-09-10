@@ -15,3 +15,5 @@ console.log(
 		}
 	})
 );
+
+console.log("\t" + "teste");

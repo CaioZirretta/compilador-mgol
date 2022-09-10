@@ -47,7 +47,7 @@ export class TokenUtils {
 
 	static novoTokenReal(arquivo: string) {
 		const token: Token = {
-			classe: TokenClasse.real,
+			classe: TokenClasse.num,
 			lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 			tipo: TokenTipo.Real,
 		};

@@ -1,4 +1,4 @@
-import { AnalisadorSemantico } from './../../semantico/AnalisadorSemantico';
+import { AnalisadorSemantico } from "./../../semantico/AnalisadorSemantico";
 import { AutomatoLexico } from "../../lexico/model/AutomatoLexico";
 import { Token } from "../../lexico/model/Token";
 import { ErroSemantico } from "../../semantico/model/ErroSemantico";
@@ -18,19 +18,21 @@ export class ErroUtils {
 		} as ErroSintatico);
 	}
 
-	static panicoErroDescricao(tokenRecebido: string, proximosEstados: string[]) {
+	static panicoErroDescricao(tokenRecebido: Token, proximosEstados: string[]) {
 		console.log({
 			erro: "Erro sintático",
 			mensagem: "Token inválido recebido",
 			detalhes: {
 				recebido: {
-					token: tokenRecebido,
+					classe: tokenRecebido.classe,
+					lexema: tokenRecebido.lexema,
+					tipo: tokenRecebido.tipo,
 					linha: AutomatoLexico.linha,
 				},
 				esperado: `${proximosEstados}`,
 			},
 			acao: "Descartando tokens até achar um válido",
-		} as ErroSintatico);
+		});
 	}
 
 	static substituicaoErroDescricao(tokenRecebido: string, proximosEstados: string[]) {
@@ -48,9 +50,9 @@ export class ErroUtils {
 		} as ErroSintatico);
 	}
 
-	static erroSemanticoDescricao(mensagem:string, causa?: string) {
+	static erroSemanticoDescricao(mensagem: string, causa?: string) {
 		console.log({
-			erro: 'Erro semântico',
+			erro: "Erro semântico",
 			mensagem: mensagem,
 			detalhes: {
 				causa: causa,

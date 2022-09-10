@@ -60,7 +60,7 @@ export class AnalisadorSintatico {
 			} else {
 				if (this.ip.classe === "eof") return;
 				// console.log("\npanicking...");
-				this.descartarAteProximoToken(a.classe, AutomatoSintatico.topoDaPilha());
+				this.descartarAteProximoToken(a, AutomatoSintatico.topoDaPilha());
 			}
 		}
 	}
@@ -207,7 +207,7 @@ export class AnalisadorSintatico {
 		this.ip = a;
 	}
 	// Tratamento de erro por descarte de token
-	private descartarAteProximoToken(a: string, t: string) {
+	private descartarAteProximoToken(a: Token, t: string) {
 		const proximosEstados: string[] = Producao.doEstado(t);
 
 		ErroUtils.panicoErroDescricao(a, proximosEstados);

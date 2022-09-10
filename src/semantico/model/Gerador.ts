@@ -2,12 +2,14 @@ import * as fs from "fs";
 
 export class Gerador {
 	static abortar: boolean = false;
-	static codigoFinal: string;
+	static codigoFinal: string = "";
 	static temporarias: number = 0;
 
-	// gerarCodigo(codigo: string) {
-	// 	Gerador.abortar ? fs.writeFileSync(__dirname + "resources/programa.c", codigo) : null;
-	// }
+	static escreverArquivo() {
+		const codigo = Gerador.gerarCodigo()
+		console.log(codigo);
+		fs.writeFileSync("src/resources/programa.c", codigo);
+	}
 
 	static gerarTemporarias() {
 		let temp: string = "";
@@ -17,7 +19,7 @@ export class Gerador {
 		return temp;
 	}
 
-	static cabecalho() {
+	private static cabecalho() {
 		return `#include<stdio.h>\n\ntypedef char literal[256];\n\nvoid main(void){`;
 	}
 
@@ -30,9 +32,34 @@ export class Gerador {
 		++Gerador.temporarias;
 	}
 
-	static formataCodigo() {}
+	private static formataCodigo(codigo: string) {
+		let linhas: string[] = codigo.split("\n");
+		let tab: number = 0;
+
+		let aux: string = "\t";
+		for (let i = 0; i < linhas.length; i++) {
+
+			if (linhas[i].startsWith("\tif")) {
+				tab++;
+				
+				for (let i = 0; i < tab - 1; i++) {
+					aux += aux;
+				}
+
+				linhas[i] = aux + linhas[i];
+			}
+
+			if (linhas[i].startsWith("\t}")) {
+				tab--;
+			}
+		}
+
+		return linhas.join("\n");
+	}
 
 	static gerarCodigo() {
-		return Gerador.cabecalho() + Gerador.gerarTemporarias() + Gerador.codigoFinal;
+		let codigo = Gerador.cabecalho() + Gerador.gerarTemporarias() + Gerador.codigoFinal;
+		// codigo = Gerador.formataCodigo(codigo);
+		return codigo;
 	}
 }

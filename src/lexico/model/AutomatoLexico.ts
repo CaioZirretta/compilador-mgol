@@ -204,9 +204,11 @@ export class AutomatoLexico {
 				lexema: arquivo.substring(AutomatoLexico.indexAuxiliar, AutomatoLexico.indexGeral),
 				tipo: TokenTipo.Real,
 			};
+			token.lexema = TokenUtils.formatarPalavra(token.lexema);
 			return token;
 		}
 
+		
 		proximo === TokenUtils.novoTokenReal ? null : AutomatoLexicoUtils.aumentarIndex();
 		return proximo(arquivo);
 	}
