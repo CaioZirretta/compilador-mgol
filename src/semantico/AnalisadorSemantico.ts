@@ -1,9 +1,5 @@
 import { ErroUtils } from "./../sintatico/utils/ErroUtils";
-import {
-	retornaSimboloPorTipo,
-	TabelaDeSimbolos,
-	verificarDeclaracaoId,
-} from "./../lexico/model/TabelaDeSimbolos";
+import { procuraPorLexema, TabelaDeSimbolos, verificarDeclaracaoId } from "./../lexico/model/TabelaDeSimbolos";
 import { Token } from "./../lexico/model/Token";
 import { Gerador } from "./model/Gerador";
 
@@ -103,9 +99,7 @@ export class AnalisadorSemantico {
 	static regra7() {
 		let idPilha = AnalisadorSemantico.procuraReversa("id")!;
 
-		const idTabela: Token = TabelaDeSimbolos.find(
-			(simbolo) => simbolo.lexema === idPilha?.lexema
-		)!;
+		const idTabela: Token = TabelaDeSimbolos.find((simbolo) => simbolo.lexema === idPilha?.lexema)!;
 
 		const TIPO = AnalisadorSemantico.procuraReversa("TIPO");
 
@@ -122,9 +116,7 @@ export class AnalisadorSemantico {
 	static regra8() {
 		let idPilha = AnalisadorSemantico.procuraReversa("id")!;
 
-		const idTabela: Token = TabelaDeSimbolos.find(
-			(simbolo) => simbolo.lexema === idPilha?.lexema
-		)!;
+		const idTabela: Token = TabelaDeSimbolos.find((simbolo) => simbolo.lexema === idPilha?.lexema)!;
 
 		const TIPO = AnalisadorSemantico.procuraReversa("TIPO");
 
@@ -161,16 +153,12 @@ export class AnalisadorSemantico {
 		const encontrado = verificarDeclaracaoId(idPilha.lexema);
 
 		if (!encontrado) {
-			ErroUtils.erroSemanticoDescricao(
-				`Não foi possível ler a variável`,
-				`Token ${idPilha.lexema} não definido`
-			);
+			ErroUtils.erroSemanticoDescricao(`Não foi possível ler a variável`, `Token ${idPilha.lexema} não definido`);
+			Gerador.abortar = true;
 			return;
 		}
 
-		const idTabela: Token = TabelaDeSimbolos.find(
-			(simbolo) => simbolo.lexema === idPilha?.lexema
-		)!;
+		const idTabela: Token = TabelaDeSimbolos.find((simbolo) => simbolo.lexema === idPilha?.lexema)!;
 
 		switch (idTabela.tipo) {
 			case "real":
@@ -183,10 +171,8 @@ export class AnalisadorSemantico {
 				Gerador.inserir(`\n\tscanf(“%s”, ${idTabela.lexema});`);
 				break;
 			default:
-				ErroUtils.erroSemanticoDescricao(
-					`Não foi possível ler a variável`,
-					`Token ${idPilha!.lexema} não definido`
-				);
+				ErroUtils.erroSemanticoDescricao(`Não foi possível ler a variável`, `Token ${idPilha!.lexema} não definido`);
+				Gerador.abortar = true;
 		}
 		AnalisadorSemantico.desempilhar(3);
 	}
@@ -194,28 +180,26 @@ export class AnalisadorSemantico {
 	static regra14() {
 		let arg = AnalisadorSemantico.procuraReversa("ARG")!;
 
-		if(arg.tipo === 'nulo'){
-			const idTabela = retornaSimboloPorTipo(arg.lexema);
-			
+		if (arg.tipo === "nulo") {
+			const idTabela = procuraPorLexema(arg.lexema);
+
 			switch (idTabela.tipo) {
 				case "real":
-					arg ? Gerador.inserir(`\n\tprintf("%lf", ${arg.lexema});`) : null;
+					arg ? Gerador.inserir(`\n\tprintf("%lf", ${arg.lexema});`) : "";
 					break;
 				case "inteiro":
-					arg ? Gerador.inserir(`\n\tprintf("%d", ${arg.lexema});`) : null;
+					arg ? Gerador.inserir(`\n\tprintf("%d", ${arg.lexema});`) : "";
 					break;
 				case "literal":
-					arg ? Gerador.inserir(`\n\tprintf("%s", ${arg.lexema});`) : null;
+					arg ? Gerador.inserir(`\n\tprintf("%s", ${arg.lexema});`) : "";
 					break;
 				default:
-					ErroUtils.erroSemanticoDescricao(
-						`Não foi possível ler a variável`,
-						`Token ${arg!.lexema} não definido`
-					);
+					ErroUtils.erroSemanticoDescricao(`Não foi possível ler a variável`, `Token ${arg!.lexema} não definido`);
+					Gerador.abortar = true;
 			}
+		} else {
+			arg ? Gerador.inserir(`\n\tprintf(${arg.lexema});`) : "";
 		}
-
-		arg ? Gerador.inserir(`\n\tprintf(${arg.lexema});`) : null;
 
 		AnalisadorSemantico.desempilhar(3);
 	}
@@ -236,10 +220,8 @@ export class AnalisadorSemantico {
 		const encontrado = verificarDeclaracaoId(idPilha.lexema);
 
 		if (!encontrado) {
-			ErroUtils.erroSemanticoDescricao(
-				`Não foi possível ler a variável`,
-				`Token ${idPilha.lexema} não definido`
-			);
+			ErroUtils.erroSemanticoDescricao(`Não foi possível ler a variável`, `Token ${idPilha.lexema} não definido`);
+			Gerador.abortar = true;
 			return;
 		}
 
@@ -255,20 +237,16 @@ export class AnalisadorSemantico {
 		const encontrado = verificarDeclaracaoId(idPilha.lexema);
 
 		if (!encontrado) {
-			ErroUtils.erroSemanticoDescricao(
-				`Não foi possível ler a variável`,
-				`Token ${idPilha.lexema} não definido`
-			);
+			ErroUtils.erroSemanticoDescricao(`Não foi possível ler a variável`, `Token ${idPilha.lexema} não definido`);
+			Gerador.abortar = true;
 			return;
 		}
 
-		const idTipo = retornaSimboloPorTipo(idPilha.lexema).tipo;
+		const idTipo = procuraPorLexema(idPilha.lexema).tipo;
 
 		if (ld.tipo !== idTipo) {
-			ErroUtils.erroSemanticoDescricao(
-				`regra 19: Tipos incompatíveis para operação `,
-				`${ld.tipo} incompatível com ${idTipo}`
-			);
+			ErroUtils.erroSemanticoDescricao(`regra 19: Tipos incompatíveis para operação `, `${ld.tipo} incompatível com ${idTipo}`);
+			Gerador.abortar = true;
 			return;
 		}
 
@@ -285,20 +263,15 @@ export class AnalisadorSemantico {
 		let opm = AnalisadorSemantico.procuraReversa("opm")!;
 
 		if (oprd1.tipo !== oprd2.tipo) {
-			ErroUtils.erroSemanticoDescricao(
-				`regra20: Tipos incompatíveis para operação`,
-				`${oprd2.tipo} incompatível com ${oprd1.tipo}`
-			);
+			ErroUtils.erroSemanticoDescricao(`regra20: Tipos incompatíveis para operação`, `${oprd2.tipo} incompatível com ${oprd1.tipo}`);
+			Gerador.abortar = true;
 			return;
 		}
 
 		if (oprd1.tipo === "literal" || oprd2.tipo === "literal") {
-			ErroUtils.erroSemanticoDescricao(
-				`Literal incompatível com operação`,
-				`Token ${
-					oprd1.lexema === "literal" ? oprd2.lexema : oprd1.lexema
-				} incompatível com a operação`
-			);
+			ErroUtils.erroSemanticoDescricao(`Literal incompatível com operação`, `Token ${oprd1.lexema === "literal" ? oprd2.lexema : oprd1.lexema} incompatível com a operação`);
+			Gerador.abortar = true;
+			return;
 		}
 
 		const ld: string = `${oprd2.lexema} ${opm.lexema} ${oprd1.lexema}`;
@@ -321,14 +294,12 @@ export class AnalisadorSemantico {
 		const encontrado = verificarDeclaracaoId(idPilha.lexema);
 
 		if (!encontrado) {
-			ErroUtils.erroSemanticoDescricao(
-				`Não foi possível ler a variável`,
-				`Token ${idPilha.lexema} não definido`
-			);
+			ErroUtils.erroSemanticoDescricao(`Não foi possível ler a variável`, `Token ${idPilha.lexema} não definido`);
+			Gerador.abortar = true;
 			return;
 		}
 
-		idPilha.tipo = retornaSimboloPorTipo(idPilha.lexema).tipo;
+		idPilha.tipo = procuraPorLexema(idPilha.lexema).tipo;
 		idPilha.classe = "OPRD";
 	}
 
@@ -344,7 +315,7 @@ export class AnalisadorSemantico {
 	// ************************************
 	static regra26() {
 		let exp_r = AnalisadorSemantico.procuraReversa("EXP_R")!;
-		Gerador.inserir(`\n\tif(${exp_r ? exp_r.lexema : null}){`);
+		Gerador.inserir(`\n\tif(${exp_r ? exp_r.lexema : ""}){`);
 		AnalisadorSemantico.desempilhar(5);
 	}
 
@@ -356,12 +327,9 @@ export class AnalisadorSemantico {
 		let opr = AnalisadorSemantico.procuraReversa("opr")!;
 
 		if (oprd1.tipo === "literal" || oprd2.tipo === "literal") {
-			ErroUtils.erroSemanticoDescricao(
-				`Literal incompatível com operação`,
-				`Token ${
-					oprd1.lexema === "literal" ? oprd2.lexema : oprd1.lexema
-				} incompatível com a operação`
-			);
+			ErroUtils.erroSemanticoDescricao(`Literal incompatível com operação`, `Token ${oprd1.lexema === "literal" ? oprd2.lexema : oprd1.lexema} incompatível com a operação`);
+			Gerador.abortar = true;
+			return;
 		}
 
 		const exp_r: string = `${oprd2.lexema} ${opr.lexema} ${oprd1.lexema}`;
@@ -374,24 +342,43 @@ export class AnalisadorSemantico {
 		AnalisadorSemantico.desempilhar(2);
 	}
 
-	static regra32() {}
+	static regra32() {
+		Gerador.inserir(`\n\t}`);
+	}
 
-	static regra33() {}
-
-	static regra34() {
-		let exp_r = AnalisadorSemantico.procuraReversa("EXP_R")!;
-		Gerador.inserir(`\n\twhile(${exp_r ? exp_r.lexema : null}){`);
+	// Similar à 26 
+	static regra33() {
+		let cabr = AnalisadorSemantico.procuraReversa("CABR");
+		let cpr = AnalisadorSemantico.procuraReversa("CPR");
+		Gerador.inserir(`\n\twhile(${cabr ? cabr.lexema : ""}){ ${cpr ? cpr.lexema : ""}`);
 		AnalisadorSemantico.desempilhar(4);
 	}
 
-	static regra35() {}
+	static regra34() {
+		let exp_r = AnalisadorSemantico.procuraReversa("EXP_R")!;
+		exp_r.classe = "CABR";
+		// let exp_r = AnalisadorSemantico.procuraReversa("EXP_R")!;
+		// Gerador.inserir(`\n\twhile(${exp_r ? exp_r.lexema : null}){`);
+		// AnalisadorSemantico.desempilhar(4);
+	}
 
-	static regra36() {}
+	static regra35() {
+		let es = AnalisadorSemantico.procuraReversa("ES")!;
+		es.lexema = "CPR";
+	}
 
-	static regra37() {}
+	static regra36() {
+		let cmd = AnalisadorSemantico.procuraReversa("CMD")!;
+		cmd.lexema = "CPR";
+	}
+
+	static regra37() {
+		let cond = AnalisadorSemantico.procuraReversa("COND")!;
+		cond.lexema = "CPR";
+	}
 
 	static regra38() {
-		Gerador.inserir(`\n\t}`)
+		// Gerador.inserir(`\n\t}`);
 	}
 
 	static ignorar() {}

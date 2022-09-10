@@ -3,7 +3,7 @@ import { AnalisadorSintatico } from "./sintatico/AnalisadorSintatico";
 import { Gerador } from './semantico/model/Gerador';
 import { AnalisadorLexico } from "./lexico/AnalisadorLexico";
 
-export const arquivoFonte: string = fs.readFileSync(__dirname + "/resources/teste.txt", "utf-8");
+export const arquivoFonte: string = fs.readFileSync(__dirname + "/resources/FONTE.txt", "utf-8");
 
 // function main(): void {
 // 	do {

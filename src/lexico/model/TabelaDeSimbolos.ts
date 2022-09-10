@@ -28,7 +28,7 @@ export function verificarDeclaracaoId(simbolo: string): boolean {
 	return idTabela ? true : false;
 }
 
-export function retornaSimboloPorTipo(lexema: string): Token {
+export function procuraPorLexema(lexema: string): Token {
 	return TabelaDeSimbolos.filter((s) => {
 		if (s.lexema === lexema) {
 			return s;

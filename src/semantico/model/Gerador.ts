@@ -6,9 +6,11 @@ export class Gerador {
 	static temporarias: number = 0;
 
 	static escreverArquivo() {
-		const codigo = Gerador.gerarCodigo()
-		console.log(codigo);
-		fs.writeFileSync("src/resources/programa.c", codigo);
+		if (!Gerador.abortar) {
+			const codigo = Gerador.gerarCodigo();
+			console.log(codigo);
+			fs.writeFileSync("src/resources/programa.c", codigo);
+		}
 	}
 
 	static gerarTemporarias() {
@@ -38,10 +40,9 @@ export class Gerador {
 
 		let aux: string = "\t";
 		for (let i = 0; i < linhas.length; i++) {
-
 			if (linhas[i].startsWith("\tif")) {
 				tab++;
-				
+
 				for (let i = 0; i < tab - 1; i++) {
 					aux += aux;
 				}
