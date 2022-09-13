@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import { AnalisadorSintatico } from "./sintatico/AnalisadorSintatico";
-import { Gerador } from './semantico/model/Gerador';
+import { Gerador } from "./semantico/model/Gerador";
 import { AnalisadorLexico } from "./lexico/AnalisadorLexico";
 
 export const arquivoFonte: string = fs.readFileSync(__dirname + "/resources/FONTE.txt", "utf-8");
@@ -13,10 +13,12 @@ export const arquivoFonte: string = fs.readFileSync(__dirname + "/resources/FONT
 // }
 
 // main();
-
+console.time()
 new AnalisadorSintatico().parser();
+console.timeEnd()
+console.log("Processo de compilação finalizado")
+
 
 // console.log(TabelaDeSimbolos)
 // console.log(AnalisadorSemantico.pilhaSemantica)
-console.log(Gerador.escreverArquivo());
 // console.dir(Producao.producoesGeradas, {maxArrayLength: null})

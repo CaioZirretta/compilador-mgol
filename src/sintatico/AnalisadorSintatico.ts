@@ -1,4 +1,4 @@
-import { TabelaDeSimbolos } from './../lexico/model/TabelaDeSimbolos';
+import { TabelaDeSimbolos } from "./../lexico/model/TabelaDeSimbolos";
 import { ErroUtils } from "./utils/ErroUtils";
 import { arquivoFonte } from "../app";
 import { AnalisadorLexico } from "../lexico/AnalisadorLexico";
@@ -17,9 +17,7 @@ export class AnalisadorSintatico {
 		this.ip = this.proximoToken();
 
 		const log = (s: string, t: string, a: string, A: string, β: string, ACTION: string) => {
-			return console.log(
-				`pilha: ${AutomatoSintatico.pilha} | ip: ${this.ip.classe} | s: ${s} | t: ${t} | a: ${a} | A: ${A} | β: ${β} | ACTION: ${ACTION}`
-			);
+			return console.log(`pilha: ${AutomatoSintatico.pilha} | ip: ${this.ip.classe} | s: ${s} | t: ${t} | a: ${a} | A: ${A} | β: ${β} | ACTION: ${ACTION}`);
 		};
 
 		while (true) {
@@ -108,7 +106,7 @@ export class AnalisadorSintatico {
 
 		Producao.producoesGeradas.push(producao);
 
-		AnalisadorSemantico.iniciar(producao, A, β);
+		AnalisadorSemantico.iniciar(producao);
 
 		this.pilhaReserva.length !== 0 ? this.pilhaReserva.pop() : null;
 	}

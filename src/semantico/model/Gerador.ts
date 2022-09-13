@@ -34,6 +34,12 @@ export class Gerador {
 		++Gerador.temporarias;
 	}
 
+	static gerarCodigo() {
+		let codigo = Gerador.cabecalho() + Gerador.gerarTemporarias() + Gerador.codigoFinal;
+		// codigo = Gerador.formataCodigo(codigo);
+		return codigo;
+	}
+
 	private static formataCodigo(codigo: string) {
 		let linhas: string[] = codigo.split("\n");
 		let tab: number = 0;
@@ -56,11 +62,5 @@ export class Gerador {
 		}
 
 		return linhas.join("\n");
-	}
-
-	static gerarCodigo() {
-		let codigo = Gerador.cabecalho() + Gerador.gerarTemporarias() + Gerador.codigoFinal;
-		// codigo = Gerador.formataCodigo(codigo);
-		return codigo;
 	}
 }

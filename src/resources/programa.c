@@ -16,9 +16,9 @@ void main(void){
 	printf("Digite A:");
 	scanf(“%s”, A);
 	T0 = B > 2;
-	if(B > 2){
+	if(T0){
 	T1 = B <= 4;
-	if(B <= 4){
+	if(T1){
 	printf("B esta entre 2 e 4");
 	}
 	}

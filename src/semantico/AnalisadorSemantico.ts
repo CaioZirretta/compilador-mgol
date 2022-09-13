@@ -51,7 +51,7 @@ export class AnalisadorSemantico {
 		["A → fim", AnalisadorSemantico.ignorar],
 	];
 
-	static iniciar(producao: string, A: string, β: string) {
+	static iniciar(producao: string) {
 		// console.log(AnalisadorSemantico.pilhaSemantica);
 		for (let i = 0; i < AnalisadorSemantico.regras.length; i++) {
 			if (producao === AnalisadorSemantico.regras[i][0]) {
@@ -84,6 +84,7 @@ export class AnalisadorSemantico {
 
 	static regra2() {
 		Gerador.inserir(`\n}`);
+		Gerador.escreverArquivo();
 	}
 
 	static regra5() {
@@ -332,11 +333,17 @@ export class AnalisadorSemantico {
 			return;
 		}
 
+		if (oprd1.tipo !== oprd2.tipo) {
+			ErroUtils.erroSemanticoDescricao(`Tipos incompatíveis para operação`, `${oprd1.lexema} ${oprd2.lexema} incompatíveis com a operação`);
+			Gerador.abortar = true;
+			return;
+		}
+
 		const exp_r: string = `${oprd2.lexema} ${opr.lexema} ${oprd1.lexema}`;
 
 		Gerador.inserirTemporaria(exp_r);
 
-		oprd2.lexema = exp_r;
+		oprd2.lexema = `T${Gerador.temporarias - 1}`;
 		oprd2.classe = "EXP_R";
 
 		AnalisadorSemantico.desempilhar(2);
@@ -346,7 +353,7 @@ export class AnalisadorSemantico {
 		Gerador.inserir(`\n\t}`);
 	}
 
-	// Similar à 26 
+	// Similar à 26
 	static regra33() {
 		let cabr = AnalisadorSemantico.procuraReversa("CABR");
 		let cpr = AnalisadorSemantico.procuraReversa("CPR");
